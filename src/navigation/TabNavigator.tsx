@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MainTabParamList } from './types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createNavigatorOptions, HeaderRight } from './navigatorOptions';
+import { useDispatch } from 'react-redux';
+import { setAuthentication } from '@/store/authSlice';
 
 // 导入页面组件
 import HomeScreen from '@/screens/HomeScreen';
@@ -42,25 +44,29 @@ const ToolsStack = () => (
 );
 
 // 发现导航栈
-const DiscoverStack = () => (
-  <Stack.Navigator screenOptions={createNavigatorOptions()}>
-    <Stack.Screen 
-      name="DiscoverMain" 
-      component={DiscoverScreen}
-      options={{
-        //title: '圈子',
-        headerRight: () => (
-          <HeaderRight 
-            text="添加"
-            onPress={() => {
-              console.log('添加');
-            }}
-          />
-        )
-      }}
-    />
-  </Stack.Navigator>
-);
+const DiscoverStack = () => {
+  const dispatch = useDispatch();
+  return (
+    <Stack.Navigator screenOptions={createNavigatorOptions()}>
+      <Stack.Screen 
+        name="DiscoverMain" 
+        component={DiscoverScreen}
+        options={{
+          //title: '圈子',
+          headerRight: () => (
+            <HeaderRight 
+              text="添加"
+              onPress={() => {
+                console.log('添加');
+                dispatch(setAuthentication(false));
+              }}
+            />
+          )
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 // 我的导航栈
 const MineStack = () => (

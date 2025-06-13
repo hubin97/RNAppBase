@@ -1,8 +1,6 @@
 export type RootStackParamList = {
   Main: undefined;
-  Auth: {
-    setAuth: (value: boolean) => void;
-  };
+  Auth: undefined;
   Profile: undefined;
 };
 
@@ -14,9 +12,7 @@ export type MainTabParamList = {
 };
 
 export type AuthStackParamList = {
-  Login: {
-    setAuth: (value: boolean) => void;
-  };
+  Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
 }; 

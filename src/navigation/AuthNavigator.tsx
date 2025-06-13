@@ -9,9 +9,7 @@ import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-export const AuthNavigator = ({ route }: { route: { params: { setAuth: (value: boolean) => void } } }) => {
-  const { setAuth } = route.params;
-
+export const AuthNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -21,7 +19,6 @@ export const AuthNavigator = ({ route }: { route: { params: { setAuth: (value: b
       <Stack.Screen 
         name="Login" 
         component={LoginScreen}
-        initialParams={{ setAuth }}
       />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
