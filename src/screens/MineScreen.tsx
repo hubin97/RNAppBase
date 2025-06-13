@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -21,15 +21,15 @@ const MineScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  // 下拉时header变高，上滑时header整体往上推
+  const headerHeight = scrollY.interpolate({
+    inputRange: [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
+    outputRange: [HEADER_HEIGHT * 2, HEADER_HEIGHT, HEADER_HEIGHT],
+    extrapolate: 'clamp',
+  });
   const headerTranslateY = scrollY.interpolate({
     inputRange: [0, HEADER_HEIGHT],
     outputRange: [0, -HEADER_HEIGHT],
-    extrapolate: 'clamp',
-  });
-
-  const headerScale = scrollY.interpolate({
-    inputRange: [-HEADER_HEIGHT, 0],
-    outputRange: [2, 1],
     extrapolate: 'clamp',
   });
 
@@ -46,21 +46,14 @@ const MineScreen = () => {
       <Animated.View 
         style={[
           styles.header,
-          {
-            transform: [
-              { translateY: headerTranslateY },
-              { scale: headerScale }
-            ]
-          }
+          { height: headerHeight, transform: [{ translateY: headerTranslateY }] }
         ]}
       >
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: 'https://picsum.photos/800/400' }}
-            style={styles.headerBackground}
-            resizeMode="cover"
-          />
-        </View>
+        <Image
+          source={{ uri: 'https://picsum.photos/800/400' }}
+          style={styles.headerBackground}
+          resizeMode="cover"
+        />
         <TouchableOpacity activeOpacity={0.8} style={styles.headerContent} onPress={() => navigation.navigate('Profile')}>
           <Image
             source={{ uri: 'https://picsum.photos/200' }}
@@ -79,7 +72,9 @@ const MineScreen = () => {
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true }
+          // useNativeDriver: true 时，Animated 只支持 transform、opacity 等有限的属性，不支持 height、width、backgroundColor 等布局属性的动画。
+          // 而我们现在用 Animated 控制了 header 的 height，这在 useNativeDriver 为 true 时是不被支持的。
+          { useNativeDriver: false }
         )}
         bounces={true}
         overScrollMode="always"
@@ -108,27 +103,16 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: HEADER_HEIGHT,
     backgroundColor: '#fff',
     overflow: 'hidden',
     zIndex: 1,
   },
-  imageContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: 'hidden',
-  },
   headerBackground: {
+    width: '100%',
+    height: '100%',
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    width: SCREEN_WIDTH,
-    height: HEADER_HEIGHT,
   },
   headerContent: {
     position: 'absolute',

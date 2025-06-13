@@ -48,12 +48,12 @@ const DiscoverStack = () => (
       name="DiscoverMain" 
       component={DiscoverScreen}
       options={{
-        title: 'Moment',
+        //title: '圈子',
         headerRight: () => (
           <HeaderRight 
             text="添加"
             onPress={() => {
-  
+              console.log('添加');
             }}
           />
         )
@@ -131,7 +131,7 @@ export const TabNavigator = () => {
         name="Discover" 
         component={DiscoverStack}
         options={{
-          tabBarLabel: 'Moment',
+          tabBarLabel: '圈子',
           tabBarIcon: ({ color, size }) => (
             <Icon name="people-outline" color={color} size={size} />
           ),
