@@ -1,0 +1,159 @@
+import { Platform, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+const DEFAULT_TINT_COLOR = '#333';
+
+type HeaderLeftProps = {
+  tintColor?: string;
+  onPress?: () => void;
+  leftElement?: React.ReactNode;
+  showLeft?: boolean;
+};
+
+const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: HeaderLeftProps) => {
+  const navigation = useNavigation();
+
+  if (!showLeft) {
+    return null;
+  }
+
+  // 设置默认返回
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      navigation.goBack();
+    }
+  };
+
+  if (!leftElement) {
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <Icon 
+          name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'} 
+          size={24} 
+          color={tintColor || DEFAULT_TINT_COLOR} 
+        />
+      </TouchableOpacity>
+    );
+  }
+
+  if (typeof leftElement === 'string') {
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <Text style={{ color: tintColor || DEFAULT_TINT_COLOR, fontSize: 16 }}>{leftElement}</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  return <View>{leftElement}</View>;
+};
+
+// 右侧按钮组件
+export const HeaderRight = ({ 
+  icon, 
+  text, 
+  onPress, 
+  tintColor = '#1E3A8A' 
+}: { 
+  icon?: string;
+  text?: string;
+  onPress?: () => void;
+  tintColor?: string;
+}) => {
+  if (!icon && !text) return null;
+  
+  return (
+    <TouchableOpacity 
+      style={styles.headerRight} 
+      onPress={onPress}
+    >
+      {icon ? (
+        <Icon name={icon} size={24} color={tintColor} />
+      ) : (
+        <Text style={[styles.headerRightText, { color: tintColor }]}>
+          {text}
+        </Text>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+/**
+ * 创建导航配置
+ * @example
+ * // 1. 最简单的使用（显示导航栏和默认返回按钮）
+ * options={createNavigatorOptions()}
+ * 
+ * // 2. 隐藏导航栏
+ * options={createNavigatorOptions({ headerShown: false })}
+ * 
+ * // 3. 显示导航栏但隐藏返回按钮
+ * options={createNavigatorOptions({ showLeft: false })}
+ * 
+ * // 4. 使用文字作为返回按钮
+ * options={createNavigatorOptions({ leftElement: '返回' })}
+ * 
+ * // 5. 使用自定义组件
+ * options={createNavigatorOptions({ 
+ *   leftElement: <CustomButton /> 
+ * })}
+ */
+export const createNavigatorOptions = (
+  options: {
+    headerShown?: boolean;    // 控制导航栏是否显示
+    showLeft?: boolean;       // 控制左侧按钮是否显示
+    leftElement?: React.ReactNode;  // 自定义左侧按钮内容
+    headerTitle?: string;     // 导航栏标题
+    headerStyle?: object;     // 导航栏样式
+    headerTitleStyle?: object; // 标题样式
+    tintColor?: string;       // 导航栏文字和图标颜色
+  } = {}
+): NativeStackNavigationOptions => {
+  const { 
+    headerShown = true,
+    showLeft = false,
+    leftElement, 
+    headerTitle,
+    headerStyle,
+    headerTitleStyle,
+    tintColor = DEFAULT_TINT_COLOR
+  } = options;
+
+  return {
+    headerShown,
+    headerBackVisible: false,
+    headerLeft: (props) => (
+      <HeaderLeft
+        {...props}
+        leftElement={leftElement}
+        showLeft={showLeft}
+      />
+    ),
+    headerTitle,
+    headerTintColor: tintColor,
+    headerTitleStyle: {
+      fontSize: 17,
+      fontWeight: '600',
+      color: tintColor,
+      ...headerTitleStyle,
+    },
+    headerStyle: {
+      backgroundColor: '#fff',
+      ...headerStyle,
+    },
+  };
+};
+
+const styles = StyleSheet.create({
+  headerRight: {
+    marginRight: 16,
+    padding: 4,
+  },
+  headerRightText: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+}); 

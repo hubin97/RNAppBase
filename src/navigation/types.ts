@@ -3,13 +3,14 @@ export type RootStackParamList = {
   Auth: {
     setAuth: (value: boolean) => void;
   };
+  Profile: undefined;
 };
 
 export type MainTabParamList = {
   Home: undefined;
   Tools: undefined;
   Discover: undefined;
-  Profile: undefined;
+  Mine: undefined;
 };
 
 export type AuthStackParamList = {

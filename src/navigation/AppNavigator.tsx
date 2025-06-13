@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
-import { MainNavigator } from './MainNavigator';
+import { TabNavigator } from './TabNavigator';
 import { AuthNavigator } from './AuthNavigator';
 import { Storage } from '@/utils/storage';
+import ProfileScreen from '@/screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export const RootNavigator = () => {
+export const AppNavigator = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // 初始化时检查认证状态
@@ -30,7 +31,7 @@ export const RootNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainNavigator} />
+          <Stack.Screen name="Main" component={TabNavigator} />
         ) : (
           <Stack.Screen 
             name="Auth" 
