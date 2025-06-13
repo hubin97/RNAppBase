@@ -30,7 +30,17 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
 
   if (!leftElement) {
     return (
-      <TouchableOpacity onPress={handlePress}>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={{
+          marginLeft: -10,
+          width: 44,
+          height: 44,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        //hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
         <Icon 
           name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'} 
           size={24} 
@@ -42,8 +52,16 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
 
   if (typeof leftElement === 'string') {
     return (
-      <TouchableOpacity onPress={handlePress}>
-        <Text style={{ color: tintColor || DEFAULT_TINT_COLOR, fontSize: 16 }}>{leftElement}</Text>
+      <TouchableOpacity 
+      onPress={handlePress}
+      style={{ 
+        marginLeft: -5,
+        minWidth: 44,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }} >
+        <Text style={{ color: tintColor || DEFAULT_TINT_COLOR, fontSize: 17, fontWeight: '500' }}>{leftElement}</Text>
       </TouchableOpacity>
     );
   }
@@ -56,7 +74,7 @@ export const HeaderRight = ({
   icon, 
   text, 
   onPress, 
-  tintColor = '#1E3A8A' 
+  tintColor 
 }: { 
   icon?: string;
   text?: string;
@@ -67,13 +85,19 @@ export const HeaderRight = ({
   
   return (
     <TouchableOpacity 
-      style={styles.headerRight} 
       onPress={onPress}
+      style={{
+        marginRight: icon ? -10: -5,
+        minWidth: 44,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }} 
     >
       {icon ? (
-        <Icon name={icon} size={24} color={tintColor} />
+        <Icon name={icon} size={24} color={tintColor || DEFAULT_TINT_COLOR } />
       ) : (
-        <Text style={[styles.headerRightText, { color: tintColor }]}>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: tintColor || DEFAULT_TINT_COLOR }}>
           {text}
         </Text>
       )}
@@ -146,14 +170,3 @@ export const createNavigatorOptions = (
     },
   };
 };
-
-const styles = StyleSheet.create({
-  headerRight: {
-    marginRight: 16,
-    padding: 4,
-  },
-  headerRightText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-}); 

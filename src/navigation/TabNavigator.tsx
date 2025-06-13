@@ -68,6 +68,7 @@ const MineStack = () => (
     screenOptions={createNavigatorOptions({
       headerShown: true,  // 默认显示导航栏
       showLeft: true,     // 默认显示返回按钮
+      //leftElement: '返回'  // 自定义返回文案
     })}
   >
     <Stack.Screen 
