@@ -1,23 +1,48 @@
+import ParallaxScrollView from '@/components/ui/ParallaxScrollView';
+import { ThemedText } from '@/components/ui/ThemedText';
+import { ThemedView } from '@/components/ui/ThemedView';
+import { RootStackParamList } from '@/navigation/types';
 import I18n from '@/utils/i18n';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+const { width: kW } = Dimensions.get('window');
 
 const ProfileScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{I18n.t('profile')}</Text>
-    </View>
-  );
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+      headerImage={
+        <ImageBackground
+          source={{ uri: 'https://picsum.photos/800/400' }}
+          resizeMode="cover"
+          // style={{ width: kW, height: kW }}
+          style={styles.headerBackground}
+        />
+      }>
+        <ThemedView style={styles.listContainer}>
+          <ThemedText type='title'>测试缩放列表</ThemedText>
+        </ThemedView>
+      </ParallaxScrollView>
+  )
 };
 
 const styles = StyleSheet.create({
-  container: {
+  listContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#999',
   },
-  text: {
-    fontSize: 24,
+  headerBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    //position: 'absolute',
+    top: 0,
+    left: 0,
   },
 });
 
