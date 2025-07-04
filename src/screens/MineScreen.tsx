@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/navigation/types';
+import I18n from '@/utils/i18n';
 
 const HEADER_HEIGHT = 200;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -80,13 +81,15 @@ const MineScreen = () => {
         overScrollMode="always"
       >
         <View style={styles.listContainer}>
-          {renderListItem('happy-outline', '我的宝宝', () => {})}
+          {/* {renderListItem('happy-outline', '我的宝宝', () => {})}
           {renderListItem('cart-outline', '我的商城', () => {})}
           {renderListItem('chatbubble-outline', '意见反馈', () => {})}
           {renderListItem('help-circle-outline', '帮助中心', () => {})}
           {renderListItem('share-social-outline', '分享应用', () => {})}
-          {renderListItem('information-circle-outline', '关于我们', () => {})}
-          {renderListItem('settings-outline', '设置', () => {})}
+          {renderListItem('information-circle-outline', '关于我们', () => {})} */}
+          {renderListItem('settings-outline', I18n.t('settings'), () => {
+            navigation.navigate('Settings');
+          })}
         </View>
       </Animated.ScrollView>
     </View>

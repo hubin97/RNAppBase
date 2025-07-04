@@ -1,10 +1,11 @@
+import I18n from '@/utils/i18n';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>设置</Text>
+      <Text style={styles.text}>{I18n.t('settings')}</Text>
     </View>
   );
 };

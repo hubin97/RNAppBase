@@ -24,16 +24,21 @@
 
 // 解决 TypeScript 导入 json 文件的类型问题
 // @ts-ignore
-import en from '@/locales/en.json';
+import en from '@/locales/output/en.json';
 // @ts-ignore
-import zh from '@/locales/zh.json';
+import zh from '@/locales/output/zh.json';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import * as RNLocalize from 'react-native-localize';
 
 const resources = {
   en: { translation: en },
   zh: { translation: zh },
 };
+
+// 获取设备语言
+const locales = RNLocalize.getLocales();
+const deviceLanguage = locales[0]?.languageCode || 'en';
 
 // 初始化 i18n
 if (!i18n.isInitialized) {
@@ -41,8 +46,8 @@ if (!i18n.isInitialized) {
     .use(initReactI18next)
     .init({
       resources,
-      lng: 'zh', // 默认语言
-      fallbackLng: 'en',
+      lng: deviceLanguage, // 自动用系统语言
+      fallbackLng: 'zh',
       interpolation: {
         escapeValue: false, // react 已经安全转义
       },
@@ -51,7 +56,10 @@ if (!i18n.isInitialized) {
 
 // 封装工具类接口
 const I18n = {
-  t: (key: string, options?: any) => i18n.t(key, options),
+  t: (key: string, options?: any) => {
+    const result = i18n.t(key, options);
+    return typeof result === 'string' ? result : String(result);
+  },
   changeLanguage: (lng: string) => i18n.changeLanguage(lng),
   getLanguage: () => i18n.language,
   getI18n: () => i18n,

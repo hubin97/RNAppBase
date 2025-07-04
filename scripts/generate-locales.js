@@ -9,14 +9,13 @@
  * 
  * 使用方法：
  * 1. 将 locales.xlsx 放在项目根目录
- * 2. 运行: node scripts/generate-locales.js
+ * 2. 运行: yarn generate-locales, 即 node scripts/generate-locales.js
  * 3. 自动生成 src/locales/zh.json, src/locales/en.json 等文件
  */
 
-
-const fs = require('fs');
-const path = require('path');
-const xlsx = require('xlsx');
+import fs from 'fs';
+import path from 'path';
+import xlsx from 'xlsx';
 
 // === 配置区 ===
 // Excel 输入文件路径（相对或绝对路径均可）
@@ -84,7 +83,7 @@ try {
   });
 
   console.log(`\n🎉 多语言文件生成完成！`);
-  console.log(`📂 输出目录: ${OUTPUT_DIR}`);
+  //console.log(`📂 输出目录: ${OUTPUT_DIR}`);
 
 } catch (error) {
   console.error('❌ 生成失败:', error.message);

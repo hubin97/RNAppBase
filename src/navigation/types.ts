@@ -2,6 +2,7 @@ export type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
   Profile: undefined;
+  Settings: undefined;
 };
 
 export type MainTabParamList = {

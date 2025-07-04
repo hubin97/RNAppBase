@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { createNavigatorOptions, HeaderRight } from './navigatorOptions';
 import { useDispatch } from 'react-redux';
 import { setAuthentication } from '@/store/authSlice';
+import I18n from '@/utils/i18n';
 
 // 导入页面组件
 import HomeScreen from '@/screens/HomeScreen';
@@ -13,6 +14,7 @@ import ToolsScreen from '@/screens/ToolsScreen';
 import DiscoverScreen from '@/screens/DiscoverScreen';
 import MineScreen from '@/screens/MineScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
+import SettingsScreen from '@/screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator();
@@ -24,7 +26,7 @@ const HomeStack = () => (
       name="HomeMain" 
       component={HomeScreen}
       options={{
-        title: '首页',
+        title: I18n.t('home'),
       }}
     />
   </Stack.Navigator>
@@ -37,7 +39,7 @@ const ToolsStack = () => (
       name="ToolsMain" 
       component={ToolsScreen}
       options={{
-        title: '工具',
+        title: I18n.t('tools'),
       }}
     />
   </Stack.Navigator>
@@ -55,9 +57,9 @@ const DiscoverStack = () => {
           //title: '圈子',
           headerRight: () => (
             <HeaderRight 
-              text="添加"
+              text={I18n.t('add')}
               onPress={() => {
-                console.log('添加');
+                console.log(I18n.t('add'));
                 dispatch(setAuthentication(false));
               }}
             />
@@ -78,7 +80,7 @@ const MineStack = () => (
     })}
   >
     <Stack.Screen 
-      name="MineMain" 
+      name="Mine" 
       component={MineScreen}
       options={{
         headerShown: false,  // 覆盖默认配置，隐藏导航栏
@@ -88,7 +90,14 @@ const MineStack = () => (
       name="Profile" 
       component={ProfileScreen}
       options={{
-        headerTitle: '个人资料',  // 只需要设置标题，其他配置继承自 screenOptions
+        headerTitle: I18n.t('profile'),  // 只需要设置标题，其他配置继承自 screenOptions
+      }}
+    />
+    <Stack.Screen 
+      name="Settings" 
+      component={SettingsScreen}
+      options={{
+        headerTitle: I18n.t('settings'),  // 只需要设置标题，其他配置继承自 screenOptions
       }}
     />
   </Stack.Navigator>
@@ -118,7 +127,7 @@ export const TabNavigator = () => {
         name="Home" 
         component={HomeStack}
         options={{
-          tabBarLabel: '首页',
+          tabBarLabel: I18n.t('home'),
           tabBarIcon: ({ color, size }) => (
             <Icon name="home-outline" color={color} size={size} />
           ),
@@ -128,7 +137,7 @@ export const TabNavigator = () => {
         name="Tools" 
         component={ToolsStack}
         options={{
-          tabBarLabel: '工具',
+          tabBarLabel: I18n.t('tools'),
           tabBarIcon: ({ color, size }) => (
             <Icon name="construct-outline" color={color} size={size} />
           ),
@@ -138,7 +147,7 @@ export const TabNavigator = () => {
         name="Discover" 
         component={DiscoverStack}
         options={{
-          tabBarLabel: '圈子',
+          tabBarLabel: I18n.t('discover'),
           tabBarIcon: ({ color, size }) => (
             <Icon name="people-outline" color={color} size={size} />
           ),
@@ -148,7 +157,7 @@ export const TabNavigator = () => {
         name="Mine" 
         component={MineStack}
         options={{
-          tabBarLabel: '我的',
+          tabBarLabel: I18n.t('mine'),
           tabBarIcon: ({ color, size }) => (
             <Icon name="person-outline" color={color} size={size} />
           ),
