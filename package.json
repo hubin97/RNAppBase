@@ -12,20 +12,24 @@
     "android:devices": "adb devices",
     "android:reverse": "adb reverse tcp:8081 tcp:8081",
     "android:logcat": "adb logcat *:S ReactNative:V ReactNativeJS:V",
-    "android:restart": "adb shell am force-stop com.rnappbase && npm run android"
+    "android:restart": "adb shell am force-stop com.rnappbase && npm run android",
+    "generate-locales": "node scripts/generate-locales.js"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.3.14",
     "@react-navigation/native": "^7.1.10",
     "@react-navigation/native-stack": "^7.3.14",
     "@reduxjs/toolkit": "^2.8.2",
+    "i18next": "^25.3.0",
     "react": "19.0.0",
+    "react-i18next": "^15.5.3",
     "react-native": "0.79.2",
     "react-native-mmkv": "^3.2.0",
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "^4.11.1",
     "react-native-vector-icons": "^10.2.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -39,6 +43,7 @@
     "@react-native/gradle-plugin": "^0.79.2",
     "@react-native/metro-config": "0.79.2",
     "@react-native/typescript-config": "0.79.2",
+    "@types/i18next": "^13.0.0",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.0.0",
     "@types/react-native-vector-icons": "^6.4.18",

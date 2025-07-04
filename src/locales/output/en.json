@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome",
+  "login": "Login",
+  "logout": "Logout",
+  "register": "Register",
+  "forgot_password": "Forgot Password",
+  "home": "Home",
+  "discover": "Discover",
+  "tools": "Tools",
+  "mine": "Mine",
+  "settings": "Settings",
+  "profile": "Profile"
+}

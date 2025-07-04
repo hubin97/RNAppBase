@@ -1,0 +1,13 @@
+{
+  "welcome": "欢迎",
+  "login": "登录",
+  "logout": "退出登录",
+  "register": "注册",
+  "forgot_password": "忘记密码",
+  "home": "首页",
+  "discover": "发现",
+  "tools": "工具",
+  "mine": "我的",
+  "settings": "设置",
+  "profile": "个人资料"
+}
