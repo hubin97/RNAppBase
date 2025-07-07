@@ -1,12 +1,14 @@
+import { ThemedText } from '@/components/ui/ThemedText';
+import { ThemedView } from '@/components/ui/ThemedView';
 import I18n from '@/utils/i18n';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const HomeScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{I18n.t('home')}</Text>
-    </View>
+    <ThemedView style={styles.container}>
+      <ThemedText style={styles.text}>{I18n.t('home')}</ThemedText>
+    </ThemedView>
   );
 };
 

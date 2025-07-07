@@ -15,6 +15,7 @@ import DiscoverScreen from '@/screens/DiscoverScreen';
 import MineScreen from '@/screens/MineScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import SettingsScreen from '@/screens/SettingsScreen';
+import { useThemeColors } from '@/hooks/useThemeColor';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator();
@@ -110,14 +111,16 @@ const shouldHideTab = (navigation: any) => {
 };
 
 export const TabNavigator = () => {
+  const themeColor = useThemeColors()
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => {
         return {
           headerShown: false,
-          tabBarActiveTintColor: '#1E3A8A',
-          tabBarInactiveTintColor: '#8E8E93',
+          tabBarActiveTintColor: themeColor.tabIconSelected,
+          tabBarInactiveTintColor: themeColor.tabIconDefault,
           tabBarStyle: {
+            backgroundColor: themeColor.background,
             display: !shouldHideTab(navigation) ? 'flex' : 'none'
           }
         };

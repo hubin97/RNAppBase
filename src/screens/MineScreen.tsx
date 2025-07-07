@@ -3,23 +3,23 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Image,
   TouchableOpacity,
   Animated,
-  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/navigation/types';
 import I18n from '@/utils/i18n';
+import { ThemedView } from '@/components/ui/ThemedView';
+import { useThemeColors } from '@/hooks/useThemeColor';
 
 const HEADER_HEIGHT = 200;
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const MineScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const themeColor = useThemeColors();
   const scrollY = useRef(new Animated.Value(0)).current;
 
   // 下拉时header变高，上滑时header整体往上推
@@ -35,15 +35,15 @@ const MineScreen = () => {
   });
 
   const renderListItem = (icon: string, title: string, onPress: () => void) => (
-    <TouchableOpacity style={styles.listItem} onPress={onPress}>
-      <Icon name={icon} size={24} color="#333" />
-      <Text style={styles.listItemText}>{title}</Text>
-      <Icon name="chevron-forward" size={24} color="#999" />
+    <TouchableOpacity style={[styles.listItem, { borderBottomColor: themeColor.separator }]} onPress={onPress}>
+      <Icon name={icon} size={24} color={themeColor.text} />
+      <Text style={[styles.listItemText, { color: themeColor.text }]}>{title}</Text>
+      <Icon name="chevron-forward" size={24} color={themeColor.icon} />
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Animated.View 
         style={[
           styles.header,
@@ -80,7 +80,7 @@ const MineScreen = () => {
         bounces={true}
         overScrollMode="always"
       >
-        <View style={styles.listContainer}>
+        <ThemedView>
           {/* {renderListItem('happy-outline', '我的宝宝', () => {})}
           {renderListItem('cart-outline', '我的商城', () => {})}
           {renderListItem('chatbubble-outline', '意见反馈', () => {})}
@@ -90,23 +90,21 @@ const MineScreen = () => {
           {renderListItem('settings-outline', I18n.t('settings'), () => {
             navigation.navigate('Settings');
           })}
-        </View>
+        </ThemedView>
       </Animated.ScrollView>
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   header: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
     overflow: 'hidden',
     zIndex: 1,
   },
@@ -155,21 +153,16 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingTop: HEADER_HEIGHT,
   },
-  listContainer: {
-    backgroundColor: '#fff',
-  },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e0e0e0',
   },
   listItemText: {
     flex: 1,
     marginLeft: 15,
     fontSize: 16,
-    color: '#333',
   },
 });
 

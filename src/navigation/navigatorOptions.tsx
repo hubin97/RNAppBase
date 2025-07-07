@@ -2,8 +2,9 @@ import { Platform, TouchableOpacity, Text, View, StyleSheet } from 'react-native
 import Icon from 'react-native-vector-icons/Ionicons';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { useThemeColors } from '@/hooks/useThemeColor';
 
-const DEFAULT_TINT_COLOR = '#333';
+// const DEFAULT_TINT_COLOR = '#333';
 
 type HeaderLeftProps = {
   tintColor?: string;
@@ -14,6 +15,7 @@ type HeaderLeftProps = {
 
 const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: HeaderLeftProps) => {
   const navigation = useNavigation();
+  const themeColor = useThemeColors()
 
   if (!showLeft) {
     return null;
@@ -44,7 +46,7 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
         <Icon 
           name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'} 
           size={24} 
-          color={tintColor || DEFAULT_TINT_COLOR} 
+          color={tintColor || themeColor.text } 
         />
       </TouchableOpacity>
     );
@@ -61,7 +63,7 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
         justifyContent: 'center',
         alignItems: 'center',
       }} >
-        <Text style={{ color: tintColor || DEFAULT_TINT_COLOR, fontSize: 17, fontWeight: '500' }}>{leftElement}</Text>
+        <Text style={{ color: tintColor || themeColor.text, fontSize: 17, fontWeight: '500' }}>{leftElement}</Text>
       </TouchableOpacity>
     );
   }
@@ -83,6 +85,8 @@ export const HeaderRight = ({
 }) => {
   if (!icon && !text) return null;
   
+  const themeColor = useThemeColors();
+
   return (
     <TouchableOpacity 
       onPress={onPress}
@@ -95,9 +99,9 @@ export const HeaderRight = ({
       }} 
     >
       {icon ? (
-        <Icon name={icon} size={24} color={tintColor || DEFAULT_TINT_COLOR } />
+        <Icon name={icon} size={24} color={tintColor || themeColor.text } />
       ) : (
-        <Text style={{ fontSize: 16, fontWeight: '500', color: tintColor || DEFAULT_TINT_COLOR }}>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: tintColor || themeColor.text }}>
           {text}
         </Text>
       )}
@@ -143,9 +147,10 @@ export const createNavigatorOptions = (
     headerTitle,
     headerStyle,
     headerTitleStyle,
-    tintColor = DEFAULT_TINT_COLOR
+    tintColor
   } = options;
 
+  const themeColor = useThemeColors()
   return {
     headerShown,
     headerBackVisible: false,
@@ -154,6 +159,7 @@ export const createNavigatorOptions = (
         {...props}
         leftElement={leftElement}
         showLeft={showLeft}
+        tintColor={tintColor}
       />
     ),
     headerTitle,
@@ -161,11 +167,11 @@ export const createNavigatorOptions = (
     headerTitleStyle: {
       fontSize: 17,
       fontWeight: '600',
-      color: tintColor,
+      color: tintColor || themeColor.text,
       ...headerTitleStyle,
     },
     headerStyle: {
-      backgroundColor: '#fff',
+      backgroundColor: themeColor.background,
       ...headerStyle,
     },
   };

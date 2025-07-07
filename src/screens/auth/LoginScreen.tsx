@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 // import { AuthStackParamList } from '@/navigation/types'; // 不再需要
 import { useDispatch } from 'react-redux';
 import { setAuthentication } from '@/store/authSlice'; // 导入 setAuthentication action
+import i18n from '@/utils/i18n';
+import { ThemedText } from '@/components/ui/ThemedText';
 
 // type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>; // 不再需要
 
@@ -17,9 +19,9 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>登录</Text>
+      <ThemedText style={styles.text}>{i18n.t('login')}</ThemedText>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>登录</Text>
+        <Text style={styles.buttonText}>{i18n.t('login')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -36,7 +38,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#007AFF',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,

@@ -6,9 +6,7 @@ import I18n from '@/utils/i18n';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-const { width: kW } = Dimensions.get('window');
+import { StyleSheet, ImageBackground } from 'react-native';
 
 const ProfileScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
