@@ -1,11 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AuthStackParamList } from './types';
-
-// 导入页面组件
-import LoginScreen from '@/screens/auth/LoginScreen';
-import RegisterScreen from '@/screens/auth/RegisterScreen';
-import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
+import { AuthStackParamList } from './core/types';
+import { ROUTES, SCREENS } from './core/routes';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -16,12 +12,9 @@ export const AuthNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen 
-        name="Login" 
-        component={LoginScreen}
-      />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name={ROUTES.Login} component={SCREENS[ROUTES.Login]}/>
+      <Stack.Screen name={ROUTES.Register} component={SCREENS[ROUTES.Register]} />
+      <Stack.Screen name={ROUTES.ForgotPassword} component={SCREENS[ROUTES.ForgotPassword]} />
     </Stack.Navigator>
   );
 }; 

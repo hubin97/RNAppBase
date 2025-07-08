@@ -10,15 +10,16 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/navigation/types';
+import { MineStackParamList } from '@/navigation/core/types';
 import I18n from '@/utils/i18n';
 import { ThemedView } from '@/components/ui/ThemedView';
 import { useThemeColors } from '@/hooks/useThemeColor';
+import { ROUTES } from '@/navigation/core/routes';
 
 const HEADER_HEIGHT = 200;
 
 const MineScreen = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<MineStackParamList>>();
   const themeColor = useThemeColors();
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -88,7 +89,7 @@ const MineScreen = () => {
           {renderListItem('share-social-outline', '分享应用', () => {})}
           {renderListItem('information-circle-outline', '关于我们', () => {})} */}
           {renderListItem('settings-outline', I18n.t('settings'), () => {
-            navigation.navigate('Settings');
+            navigation.navigate(ROUTES.Settings);
           })}
         </ThemedView>
       </Animated.ScrollView>

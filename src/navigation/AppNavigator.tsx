@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
+import type { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
+import { RootStackParamList } from './core/types';
 import { TabNavigator } from './TabNavigator';
 import { AuthNavigator } from './AuthNavigator';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store';
 import { useColorScheme } from 'react-native';
 import { useThemeColors } from '@/hooks/useThemeColor';
 
@@ -30,10 +30,7 @@ export const AppNavigator = () => {
         {isAuthenticated ? (
           <Stack.Screen name="Main" component={TabNavigator} />
         ) : (
-          <Stack.Screen 
-            name="Auth" 
-            component={AuthNavigator}
-          />
+          <Stack.Screen name="Auth" component={AuthNavigator} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

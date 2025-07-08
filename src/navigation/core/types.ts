@@ -1,0 +1,38 @@
+export type RootStackParamList = {
+  Main: undefined;
+  Auth: undefined;
+};
+
+export type TabParamList = {
+  Home: undefined;
+  Tools: undefined;
+  Discover: undefined;
+  Mine: undefined;
+};
+
+export type MineStackParamList = {
+  Mine: undefined;
+  Profile: { userId?: string } | undefined;
+  Settings: undefined;
+};
+
+export type HomeStackParamList = {
+  Home: undefined;
+  // 可扩展 Home 相关子页面
+};
+
+export type ToolsStackParamList = {
+  Tools: undefined;
+  // 可扩展 Tools 相关子页面
+};
+
+export type DiscoverStackParamList = {
+  Discover: undefined;
+  // 可扩展 Discover 相关子页面
+};
+
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+}; 
