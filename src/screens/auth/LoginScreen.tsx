@@ -6,11 +6,13 @@ import { useDispatch } from 'react-redux';
 import { setAuthentication } from '@/store/authSlice'; // 导入 setAuthentication action
 import i18n from '@/utils/i18n';
 import { ThemedText } from '@/components/ui/ThemedText';
+import { useThemeColors } from '@/hooks/useThemeColor';
 
 // type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>; // 不再需要
 
 const LoginScreen = () => {
   const dispatch = useDispatch(); // 获取 dispatch 函数
+  const themeColor = useThemeColors()
 
   const handleLogin = () => {
     // 这里可以添加实际的登录逻辑
@@ -20,8 +22,8 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <ThemedText style={styles.text}>{i18n.t('login')}</ThemedText>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>{i18n.t('login')}</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: themeColor.separator }]} onPress={handleLogin}>
+        <Text style={[styles.buttonText, { color: themeColor.text }]}>{i18n.t('login')}</Text>
       </TouchableOpacity>
     </View>
   );
