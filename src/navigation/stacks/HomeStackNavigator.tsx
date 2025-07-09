@@ -1,7 +1,7 @@
 import React from 'react';
 import I18n from '@/utils/i18n';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ROUTES, SCREENS } from '@/navigation/core/routes';
+import { ROUTES, SCREENS } from '@/navigation/core/routers';
 import { HomeStackParamList } from '../core/types';
 import { createNavigatorOptions } from '@/navigation/utils/headerOptions';
 

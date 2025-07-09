@@ -14,7 +14,7 @@ import { MineStackParamList } from '@/navigation/core/types';
 import I18n from '@/utils/i18n';
 import { ThemedView } from '@/components/ui/ThemedView';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import { ROUTES } from '@/navigation/core/routes';
+import { ROUTES } from '@/navigation/core/routers';
 
 const HEADER_HEIGHT = 200;
 

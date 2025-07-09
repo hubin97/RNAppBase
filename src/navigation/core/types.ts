@@ -4,10 +4,10 @@ export type RootStackParamList = {
 };
 
 export type TabParamList = {
-  Home: undefined;
-  Tools: undefined;
-  Discover: undefined;
-  Mine: undefined;
+  TabHome: undefined;
+  TabTools: undefined;
+  TabDiscover: undefined;
+  TabMine: undefined;
 };
 
 export type MineStackParamList = {

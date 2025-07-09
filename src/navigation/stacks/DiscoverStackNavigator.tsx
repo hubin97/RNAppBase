@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ROUTES, SCREENS } from '@/navigation/core/routes';
+import { ROUTES, SCREENS } from '@/navigation/core/routers';
 import I18n from '@/utils/i18n';
 import { createNavigatorOptions, HeaderRight } from '@/navigation/utils/headerOptions';
 import { useDispatch } from 'react-redux';

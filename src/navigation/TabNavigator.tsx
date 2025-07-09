@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabParamList } from './core/types';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import { ROUTES, STACKS } from './core/routes';
+import { ROUTES, STACKS } from './core/routers';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -29,7 +29,7 @@ export const TabNavigator = () => {
       })}
     >
       <Tab.Screen
-        name={ROUTES.Home}
+        name={ROUTES.TabHome}
         component={STACKS.Home}
         options={{
           tabBarLabel: I18n.t('home'),
@@ -39,7 +39,7 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.Tools}
+        name={ROUTES.TabTools}
         component={STACKS.Tools}
         options={{
           tabBarLabel: I18n.t('tools'),
@@ -49,7 +49,7 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.Discover}
+        name={ROUTES.TabDiscover}
         component={STACKS.Discover}
         options={{
           tabBarLabel: I18n.t('discover'),
@@ -59,7 +59,7 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.Mine}
+        name={ROUTES.TabMine}
         component={STACKS.Mine}
         options={{
           tabBarLabel: I18n.t('mine'),

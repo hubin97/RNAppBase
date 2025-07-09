@@ -5,10 +5,10 @@ import { ToolsStackNavigator } from '../stacks/ToolsStackNavigator';
 import { DiscoverStackNavigator } from '../stacks/DiscoverStackNavigator';
 import { MineStackNavigator } from '../stacks/MineStackNavigator';
 
-import HomeScreen from '@/screens/HomeScreen';
-import ToolsScreen from '@/screens/ToolsScreen';
-import DiscoverScreen from '@/screens/DiscoverScreen';
-import MineScreen from '@/screens/MineScreen';
+import HomeScreen from '@/screens/main/HomeScreen';
+import ToolsScreen from '@/screens/main/ToolsScreen';
+import DiscoverScreen from '@/screens/main/DiscoverScreen';
+import MineScreen from '@/screens/main/MineScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import SettingsScreen from '@/screens/SettingsScreen';
 import LoginScreen from '@/screens/auth/LoginScreen';
@@ -16,6 +16,10 @@ import RegisterScreen from '@/screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
 
 export const ROUTES = {
+  TabHome: 'TabHome',
+  TabTools: 'TabTools',
+  TabDiscover: 'TabDiscover',
+  TabMine: 'TabMine',
   Home: 'Home',
   Tools: 'Tools',
   Discover: 'Discover',
