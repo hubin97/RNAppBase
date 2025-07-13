@@ -13,7 +13,8 @@
     "android:reverse": "adb reverse tcp:8081 tcp:8081",
     "android:logcat": "adb logcat *:S ReactNative:V ReactNativeJS:V",
     "android:restart": "adb shell am force-stop com.rnappbase && npm run android",
-    "generate-locales": "node scripts/generate-locales.js"
+    "generate-locales": "node scripts/generate-locales.js",
+    "setup-icons": "node scripts/setup-icons.js"
   },
   "dependencies": {
     "@ant-design/icons-react-native": "^2.3.2",

@@ -1,5 +1,5 @@
 import { Platform, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from '@/components/ui/Icon';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { useThemeColors } from '@/hooks/useThemeColor';
