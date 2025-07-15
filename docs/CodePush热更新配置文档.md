@@ -407,7 +407,8 @@ CodePush 提供了完整的 React Native 热更新解决方案：
 - [React Native CodePush 文档](https://github.com/microsoft/react-native-code-push)
 - [AppCenter CLI 文档](https://docs.microsoft.com/en-us/appcenter/cli/)
 
----
+## 12.可用性注意事项
 
-*文档版本：1.0.0*
-*最后更新：2024年7月*
+- **CodePush 服务可继续使用，直至 2026 年 6 月 30 日**。
+- 2025 年 3 月 31 日后，App Center 其他功能（如构建、分发等）将退役，不再提供支持。
+- 建议依赖 CodePush 的项目提前规划替代方案，避免服务中断风险。

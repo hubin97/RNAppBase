@@ -12,6 +12,7 @@ src/store/
 ```
 
 ### 技术栈
+
 - **Redux Toolkit**：官方推荐的状态管理工具
 - **React Redux**：React 与 Redux 的集成
 - **MMKV Storage**：高性能数据持久化
@@ -96,7 +97,7 @@ const authSlice = createSlice({
       // 持久化存储
       Storage.setBoolean('isAuthenticated', action.payload);
     },
-    
+  
     // 设置用户信息
     setUser: (state, action: PayloadAction<AuthState['user']>) => {
       state.user = action.payload;
@@ -106,17 +107,17 @@ const authSlice = createSlice({
         Storage.delete('user');
       }
     },
-    
+  
     // 设置加载状态
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    
+  
     // 设置错误信息
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
-    
+  
     // 登出
     logout: (state) => {
       state.isAuthenticated = false;
@@ -211,14 +212,14 @@ const MyComponent = () => {
   const handleLogin = async () => {
     try {
       dispatch(setLoading(true));
-      
+    
       // 模拟登录 API 调用
       const userData = await loginAPI();
-      
+    
       // 更新状态
       dispatch(setUser(userData));
       dispatch(setAuthentication(true));
-      
+    
     } catch (error) {
       dispatch(setError(error.message));
     } finally {
@@ -286,11 +287,11 @@ const LoginScreen = () => {
     try {
       // 登录逻辑
       const userData = await loginAPI();
-      
+    
       // 更新 Redux 状态
       dispatch(setUser(userData));
       dispatch(setAuthentication(true));
-      
+    
     } catch (error) {
       // 错误处理
       console.error('登录失败:', error);
@@ -383,11 +384,11 @@ export const loginUser = createAsyncThunk(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
     });
-    
+  
     if (!response.ok) {
       throw new Error('登录失败');
     }
-    
+  
     return response.json();
   }
 );
@@ -433,7 +434,7 @@ const LoginScreen = () => {
       email: 'user@example.com',
       password: 'password'
     }));
-    
+  
     if (loginUser.fulfilled.match(result)) {
       // 登录成功，导航到主页
       navigation.navigate('Main');
@@ -545,10 +546,10 @@ const handleAsyncOperation = async () => {
   try {
     dispatch(setLoading(true));
     dispatch(setError(null));
-    
+  
     const result = await someAsyncOperation();
     dispatch(setData(result));
-    
+  
   } catch (error) {
     dispatch(setError(error.message));
   } finally {
@@ -603,9 +604,11 @@ export const store = configureStore({
 ## 9. 常见问题
 
 ### Q: 如何添加新的状态模块？
+
 A: 按以下步骤：
 
 1. **创建新的 Slice**：
+
 ```typescript
 // src/store/userSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
@@ -618,6 +621,7 @@ const userSlice = createSlice({
 ```
 
 2. **添加到 Store**：
+
 ```typescript
 // src/store/index.ts
 import userReducer from './userSlice';
@@ -631,11 +635,13 @@ export const store = configureStore({
 ```
 
 3. **更新类型定义**：
+
 ```typescript
 // 类型会自动推断，无需手动更新
 ```
 
 ### Q: 如何处理复杂的状态更新？
+
 A: 使用 Immer 的不可变更新模式：
 
 ```typescript
@@ -647,7 +653,7 @@ const userSlice = createSlice({
       // Immer 会自动处理不可变更新
       Object.assign(state.user, action.payload);
     },
-    
+  
     addUserPermission: (state, action: PayloadAction<string>) => {
       state.user.permissions.push(action.payload);
     },
@@ -656,6 +662,7 @@ const userSlice = createSlice({
 ```
 
 ### Q: 如何优化性能？
+
 A: 使用选择器优化和组件优化：
 
 ```typescript
@@ -690,6 +697,3 @@ const UserProfile = React.memo(({ userId }: { userId: string }) => {
 按照本文档的规范使用，可以确保状态管理的一致性和可维护性。
 
 ---
-
-*文档版本：1.0.0*  
-*最后更新：2024年7月* 
