@@ -9,6 +9,7 @@
 - [使用示例](#使用示例)
 - [优势分析](#优势分析)
 - [最佳实践](#最佳实践)
+- [缓存机制](#缓存机制)
 - [注意事项](#注意事项)
 
 ---
@@ -18,6 +19,8 @@
 ### 什么是动态调用封装？
 
 动态调用封装是一种基于统一数据结构的原生模块调用方案，通过约定标准的数据格式，实现类似反射机制的动态方法调用。这种方式可以大大简化原生模块的开发，提高代码复用性和维护性。
+
+**注意: 动态调用封装建议结合方法缓存，且高频性能敏感方法可采用直连注册，做到灵活与性能兼顾。**
 
 ### 核心思想
 
@@ -213,23 +216,23 @@ RCT_EXPORT_METHOD(invoke:(NSDictionary *)request
         if ([target respondsToSelector:selector]) {
             NSMethodSignature *signature = [target methodSignatureForSelector:selector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        
+    
             [invocation setTarget:target];
             [invocation setSelector:selector];
-        
+    
             // 设置参数
             if (params) {
                 [invocation setArgument:&params atIndex:2];
             }
-        
+    
             [invocation invoke];
-        
+    
             // 获取返回值
             id returnValue = nil;
             if (signature.methodReturnLength > 0) {
                 [invocation getReturnValue:&returnValue];
             }
-        
+    
             resolve(@{
                 @"success": @YES,
                 @"data": returnValue ?: [NSNull null]
@@ -274,23 +277,23 @@ public class NativeInvoker extends TurboModule {
             String method = request.getString("method");
             ReadableMap params = request.hasKey("params") ? request.getMap("params") : null;
             String callback = request.hasKey("callback") ? request.getString("callback") : null;
-        
+    
             // 查找注册的方法
             MethodInfo methodInfo = methodRegistry.get(method);
             if (methodInfo == null) {
                 promise.reject("METHOD_NOT_FOUND", "方法 " + method + " 未找到");
                 return;
             }
-        
+    
             // 动态调用
             Object result = methodInfo.invoke(params);
-        
+    
             WritableMap response = Arguments.createMap();
             response.putBoolean("success", true);
             response.putMap("data", result != null ? Arguments.fromMap((Map) result) : null);
-        
+    
             promise.resolve(response);
-        
+    
         } catch (Exception e) {
             WritableMap response = Arguments.createMap();
             response.putBoolean("success", false);
@@ -307,12 +310,12 @@ public class NativeInvoker extends TurboModule {
     private static class MethodInfo {
         private final Object target;
         private final String methodName;
-    
+  
         public MethodInfo(Object target, String methodName) {
             this.target = target;
             this.methodName = methodName;
         }
-    
+  
         public Object invoke(ReadableMap params) throws Exception {
             // 使用反射调用方法
             Method method = target.getClass().getMethod(methodName, ReadableMap.class);
@@ -768,13 +771,13 @@ public class CameraModule {
         // 1. 解析参数
         String quality = params.hasKey("quality") ? params.getString("quality") : "high";
         String flash = params.hasKey("flash") ? params.getString("flash") : "auto";
-      
+  
         Log.d("CameraModule", "开始拍照 - 质量: " + quality + ", 闪光灯: " + flash);
-      
+  
         // 2. 执行业务逻辑
         // 这里实现实际的拍照逻辑
         String photoPath = capturePhoto(quality, flash);
-      
+  
         // 3. 返回结果
         return photoPath;
     }
@@ -783,19 +786,19 @@ public class CameraModule {
     public String recordVideo(ReadableMap params) {
         int duration = params.hasKey("duration") ? params.getInt("duration") : 30;
         String quality = params.hasKey("quality") ? params.getString("quality") : "high";
-      
+  
         Log.d("CameraModule", "开始录制视频 - 时长: " + duration + "秒, 质量: " + quality);
-      
+  
         // 实现录制逻辑
         String videoPath = startRecording(duration, quality);
-      
+  
         return videoPath;
     }
   
     // 业务方法：切换摄像头
     public void switchCamera(ReadableMap params) {
         Log.d("CameraModule", "切换摄像头");
-      
+  
         // 实现切换逻辑
         toggleCamera();
     }
@@ -879,9 +882,9 @@ public class FileModule {
     public String readFile(ReadableMap params) {
         String path = params.getString("path");
         String encoding = params.hasKey("encoding") ? params.getString("encoding") : "utf8";
-      
+  
         Log.d("FileModule", "读取文件: " + path + ", 编码: " + encoding);
-      
+  
         try {
             // 实现文件读取逻辑
             File file = new File(path);
@@ -889,10 +892,10 @@ public class FileModule {
                 Log.e("FileModule", "文件不存在: " + path);
                 return null;
             }
-          
+      
             byte[] bytes = Files.readAllBytes(file.toPath());
             return new String(bytes, encoding);
-          
+      
         } catch (IOException e) {
             Log.e("FileModule", "读取文件失败: " + e.getMessage());
             return null;
@@ -903,15 +906,15 @@ public class FileModule {
     public boolean writeFile(ReadableMap params) {
         String path = params.getString("path");
         String content = params.getString("content");
-      
+  
         Log.d("FileModule", "写入文件: " + path);
-      
+  
         try {
             // 实现文件写入逻辑
             File file = new File(path);
             Files.write(file.toPath(), content.getBytes());
             return true;
-          
+      
         } catch (IOException e) {
             Log.e("FileModule", "写入文件失败: " + e.getMessage());
             return false;
@@ -921,14 +924,14 @@ public class FileModule {
     // 业务方法：删除文件
     public boolean deleteFile(ReadableMap params) {
         String path = params.getString("path");
-      
+  
         Log.d("FileModule", "删除文件: " + path);
-      
+  
         try {
             // 实现文件删除逻辑
             File file = new File(path);
             return file.delete();
-          
+      
         } catch (Exception e) {
             Log.e("FileModule", "删除文件失败: " + e.getMessage());
             return false;
@@ -1039,16 +1042,16 @@ const FileUploadComponent = () => {
   const handleUpload = async () => {
     try {
       setStatus('uploading');
-    
+  
       // 调用原生上传方法
       const result = await NativeInvoker.call('file.upload', {
         path: '/path/to/file',
         url: 'https://api.example.com/upload'
       });
-    
+  
       setStatus('completed');
       console.log('上传完成:', result);
-    
+  
     } catch (error) {
       setStatus('error');
       console.error('上传失败:', error);
@@ -1081,13 +1084,13 @@ const FileUploadComponent = () => {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (int i = 0; i <= 100; i += 10) {
             [NSThread sleepForTimeInterval:0.1];
-          
+      
             [self notifyJSWithEvent:@"uploadProgress" data:@{
                 @"progress": @(i),
                 @"status": @"uploading"
             }];
         }
-      
+  
         // 3. 上传完成
         [self notifyJSWithEvent:@"uploadProgress" data:@{
             @"progress": @100,
@@ -1147,10 +1150,10 @@ public void startDataSync() {
             try {
                 // 获取最新数据
                 Map<String, Object> latestData = fetchLatestData();
-              
+          
                 // 通知 JS 数据更新
                 notifyJSWithEvent("dataUpdated", latestData);
-              
+          
                 Thread.sleep(5000); // 5秒同步一次
             } catch (InterruptedException e) {
                 break;
@@ -1255,10 +1258,6 @@ const batchProcessFiles = async (filePaths: string[]) => {
   return results;
 };
 ```
-
-```
-
----
 
 ## 🚀 优势分析
 
@@ -1379,6 +1378,45 @@ try {
 ```
 
 ---
+
+## 🍀 缓存机制
+
+### Objective-C 示例
+
+```objective-c
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSValue *> *selectorCache;
+
+- (id)invokeSelector:(NSString *)selName onTarget:(id)target {
+    NSValue *selValue = self.selectorCache[selName];
+    SEL sel;
+    if (selValue) {
+        sel = [selValue pointerValue];
+    } else {
+        sel = NSSelectorFromString(selName);
+        self.selectorCache[selName] = [NSValue valueWithPointer:sel];
+    }
+    if ([target respondsToSelector:sel]) {
+        return [target performSelector:sel];
+    }
+    return nil;
+}
+
+```
+
+### Java 示例
+
+```java
+private final Map<String, Method> methodCache = new HashMap<>();
+
+public Object invokeMethod(Object target, String methodName, Object... args) throws Exception {
+    Method method = methodCache.get(methodName);
+    if (method == null) {
+        method = target.getClass().getMethod(methodName, ...); // 省略参数类型
+        methodCache.put(methodName, method);
+    }
+    return method.invoke(target, args);
+}
+```
 
 ## ⚠️ 注意事项
 

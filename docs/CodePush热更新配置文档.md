@@ -412,3 +412,43 @@ CodePush 提供了完整的 React Native 热更新解决方案：
 - **CodePush 服务可继续使用，直至 2026 年 6 月 30 日**。
 - 2025 年 3 月 31 日后，App Center 其他功能（如构建、分发等）将退役，不再提供支持。
 - 建议依赖 CodePush 的项目提前规划替代方案，避免服务中断风险。
+
+---
+
+## 13. 自建 CodePush 服务器与迁移方案
+
+随着微软宣布 App Center 将于 2026 年 6 月 30 日彻底退役，CodePush 官方云服务也将随之下线。为保障业务连续性，建议提前规划自建 CodePush 服务。具体说明如下：
+
+### 13.1 官方说明
+
+- 微软已开源 CodePush 服务端（code-push-server），并提供了独立于 App Center 的特殊版本。
+- 你可以在 GitHub 上获取源代码和文档，完全自主管理热更新服务。
+- 参考仓库：[microsoft/code-push-server（官方归档）](https://github.com/microsoft/code-push-server) 及 [lisong/code-push-server（社区维护，推荐）](https://github.com/lisong/code-push-server)
+
+### 13.2 自建服务部署流程
+
+1. **准备服务器**：选择云服务器或公司内网服务器，推荐 Linux 环境。
+2. **部署 code-push-server**：
+   - 克隆社区维护的 code-push-server 仓库
+   - 按文档配置数据库（MongoDB）、存储（本地/OSS/S3）、认证等
+   - 启动服务端，开放 API 端口
+3. **客户端配置**：
+   - 继续使用 `react-native-code-push` SDK
+   - 在客户端配置中，将 CodePush 服务器地址指向自建服务（详见社区文档）
+4. **热更新包发布**：
+   - 使用自建服务提供的 CLI 工具（兼容 code-push 命令行）上传 JS bundle
+   - 客户端会从你的服务器拉取热更新包
+
+### 13.3 迁移建议
+
+- 在 App Center 下线前，提前搭建并测试自建 CodePush 服务，确保迁移平滑
+- 关注社区维护的 code-push-server 项目，获取最新兼容性和安全更新
+- 迁移后，部署、发布、管理流程与 App Center 类似，只是服务器变成你自己维护
+
+### 13.4 参考链接
+
+- [microsoft/code-push-server（官方已归档）](https://github.com/microsoft/code-push-server)
+- [lisong/code-push-server（社区维护，推荐）](https://github.com/lisong/code-push-server)
+- [react-native-code-push 文档](https://github.com/microsoft/react-native-code-push)
+
+---

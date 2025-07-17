@@ -62,47 +62,35 @@ if (fs.existsSync(androidBuildGradlePath)) {
 // 2. 检查 iOS 系统要求
 console.log('\n🍎 检查 iOS 系统要求...');
 
-if (fs.existsSync(iosInfoPlistPath)) {
-  const infoPlistContent = fs.readFileSync(iosInfoPlistPath, 'utf8');
-  
-  // 检查 MinimumOSVersion
-  const minOsMatch = infoPlistContent.match(/<key>MinimumOSVersion<\/key>\s*<string>([^<]+)<\/string>/);
-  if (minOsMatch) {
-    const minOsVersion = minOsMatch[1];
-    const versionNum = parseFloat(minOsVersion);
-    
-    if (versionNum >= 14.0) {
-      console.log(`✅ iOS 最低版本: ${minOsVersion}`);
+const pbxprojPath = path.join(projectRoot, 'ios', 'RNAppBase.xcodeproj', 'project.pbxproj');
+if (fs.existsSync(pbxprojPath)) {
+  const pbxprojContent = fs.readFileSync(pbxprojPath, 'utf8');
+  const matches = [...pbxprojContent.matchAll(/IPHONEOS_DEPLOYMENT_TARGET = ([0-9.]+)/g)];
+  if (matches.length > 0) {
+    const versions = matches.map(m => parseFloat(m[1]));
+    const minVersion = Math.min(...versions);
+    if (minVersion >= 15.1) {
+      console.log(`✅ iOS 最低版本: ${minVersion}`);
       score += 25;
-      
-      if (versionNum >= 15.0) {
-        console.log('   🎯 推荐版本，性能最佳');
-        score += 10;
-      } else {
-        console.log('   ⚠️  建议升级到 iOS 15.0+ 以获得更好性能');
-      }
+      console.log('   🎯 推荐版本，性能最佳');
+      score += 10;
+    } else if (minVersion >= 14.0) {
+      console.log(`⚠️  iOS 最低版本: ${minVersion} (模板默认)`);
+      console.log('   React Native 0.80+ 官方要求最低 iOS 15.1');
+      console.log('   建议将 Target 级别 IPHONEOS_DEPLOYMENT_TARGET 升级为 15.1');
+      score += 15;
     } else {
-      console.log(`❌ iOS 最低版本过低: ${minOsVersion}`);
-      console.log('   React Native 0.75+ 要求最低 iOS 14.0');
-      console.log('   新架构要求最低 iOS 14.0');
+      console.log(`❌ iOS 最低版本过低: ${minVersion}`);
+      console.log('   React Native 0.80+ 官方要求最低 iOS 15.1');
+      console.log('   新架构要求最低 iOS 15.1');
     }
   } else {
-    console.log('⚠️  未找到 MinimumOSVersion 配置');
-    console.log('   建议在 Info.plist 中添加:');
-    console.log('   <key>MinimumOSVersion</key>');
-    console.log('   <string>14.0</string>');
-    score += 15; // 部分分数，因为可能使用默认值
-  }
-  
-  // 检查新架构配置
-  if (infoPlistContent.includes('RCTNewArchEnabled') && infoPlistContent.includes('<true/>')) {
-    console.log('✅ iOS 新架构已启用');
+    console.log('⚠️  未找到 IPHONEOS_DEPLOYMENT_TARGET 配置');
+    console.log('   建议在 Xcode 项目设置中配置 Deployment Target >= 15.1');
     score += 10;
-  } else {
-    console.log('❌ iOS 新架构未启用');
   }
 } else {
-  console.log('❌ 未找到 iOS Info.plist 文件');
+  console.log('❌ 未找到 iOS project.pbxproj 文件');
 }
 
 // 3. 检查开发环境
@@ -174,7 +162,7 @@ console.log('\n💡 优化建议:');
 
 if (score < 90) {
   console.log('1. 确保 Android minSdkVersion >= 24 (RN 0.75+)');
-  console.log('2. 确保 iOS MinimumOSVersion >= 14.0 (RN 0.75+)');
+  console.log('2. 确保 iOS MinimumOSVersion >= 15.1 (RN 0.80+)');
   console.log('3. 升级到 React Native 0.80+');
   console.log('4. 使用 Node.js 18+');
   console.log('5. 启用新架构配置');
@@ -182,13 +170,10 @@ if (score < 90) {
 
 // 7. 设备覆盖率信息
 console.log('\n📱 设备覆盖率信息:');
-console.log('Android API 21+ (5.0+): 99.2% 的设备支持');
-console.log('Android API 23+ (6.0+): 97.8% 的设备支持');
 console.log('Android API 24+ (7.0+): 96.5% ⭐ RN 0.75+ 最低要求');
 console.log('Android API 26+ (8.0+): 92.1% ⭐ 推荐版本');
-console.log('iOS 12.4+: 98.5% 的设备支持');
-console.log('iOS 14.0+: 95.2% ⭐ RN 0.75+ 最低要求');
-console.log('iOS 15.0+: 89.7% ⭐ 推荐版本');
+console.log('iOS 15.1+: 95% ⭐ RN 0.80+ 最低要求');
+console.log('iOS 16.0+: 90% 推荐版本');
 
 console.log('\n📖 更多信息请查看: docs/React Native新架构版本兼容性分析.md');
 
