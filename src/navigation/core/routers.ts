@@ -5,7 +5,7 @@ import { ToolsStackNavigator } from '../stacks/ToolsStackNavigator';
 import { DiscoverStackNavigator } from '../stacks/DiscoverStackNavigator';
 import { MineStackNavigator } from '../stacks/MineStackNavigator';
 
-import HomeScreen from '@/screens/main/HomeScreen';
+import HomeScreen from '@/screens/main/home/index';
 import ToolsScreen from '@/screens/main/ToolsScreen';
 import DiscoverScreen from '@/screens/main/DiscoverScreen';
 import MineScreen from '@/screens/main/MineScreen';
@@ -14,6 +14,7 @@ import SettingsScreen from '@/screens/SettingsScreen';
 import LoginScreen from '@/screens/auth/LoginScreen';
 import RegisterScreen from '@/screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
+import WebViewScreen from '@/components/ui/ThemedWebView';
 
 export const ROUTES = {
   TabHome: 'TabHome',
@@ -30,6 +31,8 @@ export const ROUTES = {
   Register: 'Register',
   ForgotPassword: 'ForgotPassword',
   // 其他页面按需添加
+  WebView: 'WebView'
+  
 } as const;
 
 export const STACKS = {
@@ -54,5 +57,7 @@ export const SCREENS = {
   [ROUTES.Mine]: MineScreen,
   [ROUTES.Profile]: ProfileScreen,
   [ROUTES.Settings]: SettingsScreen,
+  
   // 其他页面按需添加
+  [ROUTES.WebView]: WebViewScreen
 }; 

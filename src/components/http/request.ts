@@ -1,36 +1,45 @@
-// 请求方法类型
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+import { HttpMethod, RequestConfig, Response, Plugin, ProviderConfig } from './types';
 
-// 请求配置
-export interface RequestConfig {
-    url: string;
-    method: HttpMethod;
-    headers?: Record<string, string>;
-    body?: string;
-    auth?: boolean; // 是否需要认证
+import axios from 'axios';
+
+function normalizeHeaders(headers?: any): Record<string, string> {
+    if (!headers) return {};
+    if (headers instanceof Headers) {
+        const obj: Record<string, string> = {};
+        headers.forEach((value, key) => {
+            obj[key] = value;
+        });
+        return obj;
+    }
+    if (Array.isArray(headers)) {
+        return Object.fromEntries(headers);
+    }
+    return headers as Record<string, string>;
 }
 
-// 响应类型
-export interface Response<T = any> {
-    data: T;
-    status: number;
-}
-
-// 插件接口
-export interface Plugin {
-    // 请求前处理
-    prepare?: (config: RequestConfig) => Promise<RequestConfig> | RequestConfig;
-    // 请求发送前处理
-    willSend?: (config: RequestConfig) => Promise<void> | void;
-    // 响应处理
-    didReceive?: (response: Response) => Promise<any> | any;
-}
-
-// Provider 配置
-export interface ProviderConfig {
-    baseURL: string;
-    timeout: number;
-    plugins?: Plugin[];
+function setupConfig(
+    baseURL: string,
+    method: HttpMethod,
+    url: string,
+    data?: Record<string, any> | string,
+    options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}
+): RequestConfig {
+    const { auth, useAxios, ...rest } = options;
+    const isBodyMethod = ['POST', 'PUT', 'PATCH'].includes(method);
+    const body = isBodyMethod
+        ? (typeof data === 'string' ? data : JSON.stringify(data))
+        : undefined;
+    const headers = isBodyMethod
+        ? { 'Content-Type': 'application/json', ...normalizeHeaders(rest.headers) }
+        : normalizeHeaders(rest.headers);
+    return {
+        url: url.startsWith('http') ? url : `${baseURL}${url}`,
+        method,
+        headers,
+        body,
+        auth,
+        useAxios: useAxios !== undefined ? useAxios : true // 默认true
+    };
 }
 
 export class Provider {
@@ -58,93 +67,56 @@ export class Provider {
         return result;
     }
 
-    private async handleFetch<T>(url: string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        const config: RequestConfig = {
-            url: url.startsWith('http') ? url : `${this.baseURL}${url}`,
-            method: (rest.method as HttpMethod) || 'GET',
-            headers: rest.headers as Record<string, string> || {},
-            body: rest.body as string,
-            auth
-        };
+    private async handleRequest<T>(config: RequestConfig): Promise<T> {
+        // 应用 prepare 插件
+        const preparedConfig = await this.applyPlugins('prepare', config);
+        // 应用 willSend 插件
+        await this.applyPlugins('willSend', preparedConfig);
 
-        try {
-            // 应用 prepare 插件
-            const preparedConfig = await this.applyPlugins('prepare', config);
-            
-            // 应用 willSend 插件
-            await this.applyPlugins('willSend', preparedConfig);
-
+        let data, status;
+        if (preparedConfig.useAxios) {
+            // 用 axios 发送请求
+            const axiosRes = await axios({
+                url: preparedConfig.url,
+                method: preparedConfig.method,
+                headers: preparedConfig.headers,
+                data: preparedConfig.body
+            });
+            data = axiosRes.data;
+            status = axiosRes.status;
+        } else {
+            // 用 fetch 发送请求
             const response = await fetch(preparedConfig.url, {
                 method: preparedConfig.method,
                 headers: preparedConfig.headers,
                 body: preparedConfig.body
             });
-
-            const data = await response.json();
-            const result: Response = { data, status: response.status };
-
-            // 应用 didReceive 插件处理响应
-            return await this.applyPlugins('didReceive', result) as T;
-        } catch (error) {
-            // 网络错误等直接抛出
-            throw error;
+            data = await response.json();
+            status = response.status;
         }
+        const result: Response = { data, status };
+        // 应用 didReceive 插件处理响应
+        return await this.applyPlugins('didReceive', result) as T;
     }
 
-    async get<T>(url: string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        return this.handleFetch<T>(url, { ...rest, method: 'GET', auth });
+    async get<T>(url: string, options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}): Promise<T> {
+        return this.handleRequest<T>(setupConfig(this.baseURL, 'GET', url, undefined, options));
     }
 
-    async post<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        const body = typeof data === 'string' ? data : JSON.stringify(data);
-        return this.handleFetch<T>(url, {
-            ...rest,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...rest.headers
-            },
-            body,
-            auth
-        });
+    async post<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}): Promise<T> {
+        return this.handleRequest<T>(setupConfig(this.baseURL, 'POST', url, data, options));
     }
 
-    async put<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        const body = typeof data === 'string' ? data : JSON.stringify(data);
-        return this.handleFetch<T>(url, {
-            ...rest,
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...rest.headers
-            },
-            body,
-            auth
-        });
+    async put<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}): Promise<T> {
+        return this.handleRequest<T>(setupConfig(this.baseURL, 'PUT', url, data, options));
     }
 
-    async delete<T>(url: string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        return this.handleFetch<T>(url, { ...rest, method: 'DELETE', auth });
+    async delete<T>(url: string, options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}): Promise<T> {
+        return this.handleRequest<T>(setupConfig(this.baseURL, 'DELETE', url, undefined, options));
     }
 
-    async patch<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean } = {}): Promise<T> {
-        const { auth, ...rest } = options;
-        const body = typeof data === 'string' ? data : JSON.stringify(data);
-        return this.handleFetch<T>(url, {
-            ...rest,
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                ...rest.headers
-            },
-            body,
-            auth
-        });
+    async patch<T>(url: string, data?: Record<string, any> | string, options: RequestInit & { auth?: boolean, useAxios?: boolean } = {}): Promise<T> {
+        return this.handleRequest<T>(setupConfig(this.baseURL, 'PATCH', url, data, options));
     }
 }
 

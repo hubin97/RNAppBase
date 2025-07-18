@@ -8,6 +8,7 @@ import { TabNavigator } from './TabNavigator';
 import { AuthNavigator } from './AuthNavigator';
 import { useColorScheme } from 'react-native';
 import { useThemeColors } from '@/hooks/useThemeColor';
+import WebViewScreen from '@/components/ui/ThemedWebView';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -28,9 +29,15 @@ export const AppNavigator = () => {
     <NavigationContainer theme={Theme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={TabNavigator} />
+          <>
+            <Stack.Screen name="Main" component={TabNavigator} />
+            <Stack.Screen name="WebView" component={WebViewScreen} />
+          </>
         ) : (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
+          <>
+            <Stack.Screen name="Auth" component={AuthNavigator} />
+            <Stack.Screen name="WebView" component={WebViewScreen} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

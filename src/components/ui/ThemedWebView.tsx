@@ -1,13 +1,13 @@
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useNavigation } from "expo-router/build/useNavigation";
 import React, { useLayoutEffect, useState } from "react";
+import Icon, { Font } from "./Icon";
 import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 import { ThemedView } from "./ThemedView";
+import { useThemeColors } from "@/hooks/useThemeColor";
+import { useNavigation } from "@react-navigation/native";
+import { useRoute } from '@react-navigation/native';
+
 const { width: kW, height: kH } = Dimensions.get('window');
 
 type Props = {
@@ -15,41 +15,41 @@ type Props = {
     url: string
 };
   
-export default function WebViewScreen({ title, url }: Props) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-
-  const insets = useSafeAreaInsets();
-  const [progress, setProgress] = useState(0);
-
+export default function WebViewScreen() {
+  
+  const route = useRoute();
+  const themeColors = useThemeColors();
   const navigation = useNavigation();
+
+  // @ts-ignore
+  const { title, url = '' } = route.params || {};
+  const [progress, setProgress] = useState(0);
 
   useLayoutEffect(() => {
     navigation.setOptions({
         title: title,
         headerShown: true,
         headerStyle: {
-            backgroundColor: colors.background,
+            backgroundColor: themeColors.background,
         },
         headerBackVisible: false,
         headerBackTitleVisible: false,
-        headerTintColor: colors.text,
+        headerTintColor: themeColors.text,
         headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
-            textColor: colors.text,
+            textColor: themeColors.text,
         },
         headerLeft: () => (
-            <Ionicons 
-              name="chevron-back" 
+            <Icon name={'chevron-back'} 
+              fontType={Font.Ionicons}
               size={24} 
-              color={ colors.text }
-              style={{ marginLeft: 0 }}
-              onPress={() => router.back()}
-            />
+              color={themeColors.text} onPress={() =>
+              navigation.goBack()
+            }/>
         ),
     });
-  }, [navigation, title, colorScheme, colors]);
+  }, [navigation, title, themeColors]);
 
   const _renderProgressView = (
     progress < 1 && (
@@ -60,7 +60,7 @@ export default function WebViewScreen({ title, url }: Props) {
   );
 
   return (
-    <ThemedView style={{ flex: 1, backgroundColor: colors.background }}>
+    <ThemedView style={{ flex: 1, backgroundColor: themeColors.background }}>
       { _renderProgressView }
       <WebView style={{ flex: 1 }} source={{ uri: url }} onLoadProgress={(e) => {
         //console.log('>>>', e.nativeEvent.progress);

@@ -34,16 +34,6 @@ export type IconFontType =
   | 'SimpleLineIcons'
   | 'Zocial';
 
-// 图标组件属性
-export interface IconProps {
-  name: string;
-  size?: number;
-  color?: string;
-  fontType?: IconFontType;
-  style?: StyleProp<ViewStyle>;
-  onPress?: () => void;
-}
-
 // 字体映射表
 const iconFonts = {
   Ionicons,
@@ -63,6 +53,17 @@ const iconFonts = {
   Zocial,
 };
 
+export const Font = iconFonts;
+
+export interface IconProps {
+  name: string;
+  size?: number;
+  color?: string;
+  fontType?: keyof typeof iconFonts | React.ComponentType<any>;
+  style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+}
+
 /**
  * 通用图标组件
  * 支持所有 react-native-vector-icons 字体图集
@@ -71,8 +72,12 @@ const iconFonts = {
  * // 使用默认 Ionicons
  * <Icon name="home" size={24} color="#333" />
  * 
- * // 使用指定字体
+ * // 使用指定字体（字符串方式，兼容老用法）
  * <Icon name="home" fontType="MaterialIcons" size={24} color="#333" />
+ * 
+ * // 使用指定字体（推荐，类型安全且有自动补全）
+ * import { Font } from '@/components/ui/Icon';
+ * <Icon name="home" fontType={Font.AntDesign} size={24} color="#333" />
  * 
  * // 可点击图标
  * <Icon name="heart" onPress={() => console.log('clicked')} />
@@ -81,12 +86,15 @@ const Icon: React.FC<IconProps> = ({
   name,
   size = 24,
   color = '#333',
-  fontType = 'Ionicons',
+  fontType = Font.Ionicons,
   style,
   onPress,
 }) => {
-  const IconComponent = iconFonts[fontType];
-  
+  const IconComponent =
+    typeof fontType === 'string'
+      ? iconFonts[fontType as keyof typeof iconFonts]
+      : fontType;
+
   if (!IconComponent) {
     console.warn(`Icon font type "${fontType}" is not supported`);
     return null;

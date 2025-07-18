@@ -1,5 +1,5 @@
 import { Platform, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
-import Icon from '@/components/ui/Icon';
+import Icon, { Font } from '@/components/ui/Icon';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { useThemeColors } from '@/hooks/useThemeColor';
@@ -44,7 +44,8 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
         //hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
         <Icon 
-          name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'} 
+          name={'chevron-back'} 
+          fontType={Font.Ionicons}
           size={24} 
           color={tintColor || themeColor.text } 
         />
@@ -99,7 +100,11 @@ export const HeaderRight = ({
       }} 
     >
       {icon ? (
-        <Icon name={icon} size={24} color={tintColor || themeColor.text } />
+        <Icon           
+        name={'chevron-forward'} 
+        fontType={Font.Ionicons}
+        size={24} 
+        color={tintColor || themeColor.text } />
       ) : (
         <Text style={{ fontSize: 16, fontWeight: '500', color: tintColor || themeColor.text }}>
           {text}
