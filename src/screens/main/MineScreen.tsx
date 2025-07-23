@@ -56,7 +56,9 @@ const MineScreen = () => {
           style={styles.headerBackground}
           resizeMode="cover"
         />
-        <TouchableOpacity activeOpacity={0.8} style={styles.headerContent} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.headerContent} onPress={() => {
+          navigation.navigate(ROUTES.Profile);
+        }}>
           <Image
             source={{ uri: 'https://picsum.photos/200' }}
             style={styles.avatar}
@@ -82,12 +84,15 @@ const MineScreen = () => {
         overScrollMode="always"
       >
         <ThemedView>
-          {/* {renderListItem('happy-outline', '我的宝宝', () => {})}
+           {/* 
           {renderListItem('cart-outline', '我的商城', () => {})}
           {renderListItem('chatbubble-outline', '意见反馈', () => {})}
           {renderListItem('help-circle-outline', '帮助中心', () => {})}
           {renderListItem('share-social-outline', '分享应用', () => {})}
           {renderListItem('information-circle-outline', '关于我们', () => {})} */}
+          {renderListItem('happy-outline', I18n.t('baby'), () => {
+              navigation.navigate(ROUTES.Baby);
+          })}
           {renderListItem('settings-outline', I18n.t('settings'), () => {
             navigation.navigate(ROUTES.Settings);
           })}

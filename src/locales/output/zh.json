@@ -9,5 +9,7 @@
   "tools": "工具",
   "mine": "我的",
   "settings": "设置",
-  "profile": "个人资料"
+  "profile": "个人资料",
+  "baby": "宝宝",
+  "baby_chart_desc": "参考曲线根据《世卫组织（WHO）儿童生长曲线》制定"
 }

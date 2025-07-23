@@ -9,5 +9,7 @@
   "tools": "Tools",
   "mine": "Mine",
   "settings": "Settings",
-  "profile": "Profile"
+  "profile": "Profile",
+  "baby": "Baby",
+  "baby_chart_desc": "Reference curve data is based on the WHO Child Growth Standards."
 }

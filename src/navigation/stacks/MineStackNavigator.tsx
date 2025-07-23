@@ -26,5 +26,10 @@ export const MineStackNavigator = () => (
       component={SCREENS[ROUTES.Settings]}
       options={{ headerTitle: I18n.t('settings') }}
     />
+    <Stack.Screen
+      name={ROUTES.Baby}
+      component={SCREENS[ROUTES.Baby]}
+      options={{ headerTitle: I18n.t('baby') }}
+    />
   </Stack.Navigator>
 ); 

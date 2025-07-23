@@ -15,6 +15,7 @@ export type MineStackParamList = {
   Mine: undefined;
   Profile: { userId?: string } | undefined;
   Settings: undefined;
+  Baby: undefined;
 };
 
 export type HomeStackParamList = {

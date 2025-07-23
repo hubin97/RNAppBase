@@ -13,9 +13,9 @@
  * 3. 自动生成 src/locales/zh.json, src/locales/en.json 等文件
  */
 
-import fs from 'fs';
-import path from 'path';
-import xlsx from 'xlsx';
+const fs = require('fs');
+const path = require('path');
+const xlsx = require('xlsx');
 
 // === 配置区 ===
 // Excel 输入文件路径（相对或绝对路径均可）

@@ -15,21 +15,29 @@ import LoginScreen from '@/screens/auth/LoginScreen';
 import RegisterScreen from '@/screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
 import WebViewScreen from '@/components/ui/ThemedWebView';
+import BabyScreen from '@/screens/BabyScreen';
 
 export const ROUTES = {
+  // auth
+  Login: 'Login',
+  Register: 'Register',
+  ForgotPassword: 'ForgotPassword',
+
+  // tab
   TabHome: 'TabHome',
   TabTools: 'TabTools',
   TabDiscover: 'TabDiscover',
   TabMine: 'TabMine',
+
+  // main
   Home: 'Home',
   Tools: 'Tools',
   Discover: 'Discover',
   Mine: 'Mine',
   Profile: 'Profile',
   Settings: 'Settings',
-  Login: 'Login',
-  Register: 'Register',
-  ForgotPassword: 'ForgotPassword',
+  Baby: 'Baby',
+
   // 其他页面按需添加
   WebView: 'WebView'
   
@@ -57,6 +65,7 @@ export const SCREENS = {
   [ROUTES.Mine]: MineScreen,
   [ROUTES.Profile]: ProfileScreen,
   [ROUTES.Settings]: SettingsScreen,
+  [ROUTES.Baby]: BabyScreen,
   
   // 其他页面按需添加
   [ROUTES.WebView]: WebViewScreen
