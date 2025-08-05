@@ -1,5 +1,8 @@
 PODS:
   - boost (1.84.0)
+  - DGCharts (5.0.0):
+    - DGCharts/Core (= 5.0.0)
+  - DGCharts/Core (5.0.0)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
   - FBLazyVector (0.80.1)
@@ -1660,6 +1663,10 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
+  - react-native-charts-wrapper (0.6.0):
+    - DGCharts (= 5.0.0)
+    - React
+    - SwiftyJSON (= 5.0)
   - react-native-mmkv (3.3.0):
     - boost
     - DoubleConversion
@@ -2684,6 +2691,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.1)
+  - SwiftyJSON (5.0.0)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2728,6 +2736,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-charts-wrapper (from `../node_modules/react-native-charts-wrapper`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2777,10 +2786,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - DGCharts
     - libwebp
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   boost:
@@ -2864,6 +2875,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-charts-wrapper:
+    :path: "../node_modules/react-native-charts-wrapper"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
@@ -2957,6 +2970,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  DGCharts: 6e0cf2644e8f81ad13f04caa8bc18502870a1c54
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 09f03e4b6f42f955734b64a118f86509cc719427
@@ -2997,6 +3011,7 @@ SPEC CHECKSUMS:
   React-logger: 984ebd897afad067555d081deaf03f57c4315723
   React-Mapbuffer: 0c045c844ce6d85cde53e85ab163294c6adad349
   React-microtasksnativemodule: d9499269ad1f484ae71319bac1d9231447f2094e
+  react-native-charts-wrapper: 1c7c46838194a9a21ecc6d20d742ced0a2152cc9
   react-native-mmkv: 7fb4729ad5cb787a4394e6c4bd48e4b8ec30f25c
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-safe-area-context: 3bae4f8474c13ab141c40ed6c5c33f6177778d71
@@ -3044,6 +3059,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Yoga: daa1e4de4b971b977b23bc842aaa3e135324f1f3
 
 PODFILE CHECKSUM: 07f5037a295695ba9e769990f98e39e4a389f127
