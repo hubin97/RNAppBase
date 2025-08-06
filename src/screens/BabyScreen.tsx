@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import I18n from '@/utils/i18n';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { ThemedView } from '@/components/ui/ThemedView';
 import { StyleSheet } from 'react-native';
 import { Tabs } from '@ant-design/react-native';
-import { CartesianChart, Line, useChartTransformState, AreaRange } from 'victory-native';
+import { useAnimatedReaction, useSharedValue, withTiming, } from "react-native-reanimated";  
+import { CartesianChart, Line, useChartTransformState, AreaRange, getTransformComponents, setTranslate, setScale } from 'victory-native';
 import { useThemeColors } from '@/hooks/useThemeColor';
 import { useFont } from '@shopify/react-native-skia';
 // https://www.fontspace.com/category/calligraphy
@@ -24,34 +25,10 @@ const BabyScreen = () => {
     const themeColors = useThemeColors();
     const [selectedTab, setSelectedTab] = useState(0);
     const [selectedGender, setSelectedGender] = useState('boy');
-    const transformState = useChartTransformState({
-        scaleX: 1.0, // 保持正常X轴比例，禁用缩放
-        scaleY: 1.0, // 保持正常Y轴比例，禁用缩放
-    });
+    
+    const { state } = useChartTransformState();
 
-    // 监听变换状态，控制交互行为
-    useEffect(() => {
-        if (transformState.state.panActive.value) {
-            console.warn('用户正在拖拽图表');
-        }
-        
-        if (transformState.state.zoomActive.value) {
-            console.warn('用户正在缩放图表');
-        }
-
-        // 检查并限制边界
-        const matrix = transformState.state.matrix.value;
-        const offset = transformState.state.offset.value;
-        
-        // 如果滑动超出了数据范围，重置到边界
-        if (offset[12] < 0) { // X轴偏移小于0
-            console.warn('检测到滑动超出左边界，已限制');
-        }
-        if (offset[12] > 60) { // X轴偏移大于60
-            console.warn('检测到滑动超出右边界，已限制');
-        }
-    }, [transformState.state]);
-
+    // 数据
     const boy_weight_data = selectedGender === 'boy' ? boy_weight.result.baseDataList : girl_weight.result.baseDataList;
     const boy_height_data = selectedGender === 'boy' ? boy_height.result.baseDataList : girl_height.result.baseDataList;
     const boy_head_data = selectedGender === 'boy' ? boy_head.result.baseDataList : girl_head.result.baseDataList;
@@ -62,17 +39,89 @@ const BabyScreen = () => {
         { index: 2, title: I18n.t('head') },
     ];
 
-    // 选择数据
-    let chartData;
-    if (selectedTab === 0) chartData = boy_height_data;  // 身高数据
-    else if (selectedTab === 1) chartData = boy_weight_data;  // 体重数据
-    else chartData = boy_head_data;  // 头围数据
+    // 配置图表数据范围
+    const domainXRange: [number, number] = [0, 60]; // 年龄范围
+    const domainYRange = useMemo<[number, number]>(() => {
+        //if (selectedTab === 0) return [20, 160]; // 身高范围
+        // 这里如果显示超出可视范围, 又限制y轴滚动, 会有问题
+        if (selectedTab === 0) return [20, 120]; // 身高范围
+        if (selectedTab === 1) return [0, 30]; // 体重范围
+        return [20, 80]; // 头围范围
+    }, [selectedTab]);
+      
+    // 配置图表可视范围
+    const viewportXRange: [number, number] = [0, 6]; // X轴视口范围：显示6个刻度
+    const viewportYRange = useMemo<[number, number]>(() => {
+        if (selectedTab === 0) return [20, 120]; // 身高可视范围
+        if (selectedTab === 1) return [0, 30]; // 体重可视范围
+        return [20, 80]; // 头围可视范围
+    }, [selectedTab]);
 
-    // 调试信息：检查数据范围
-    console.log('当前选中的数据:', selectedTab === 0 ? '身高' : selectedTab === 1 ? '体重' : '头围');
-    console.log('数据长度:', chartData.length);
-    console.log('第一个数据点:', chartData[0]);
-    console.log('最后一个数据点:', chartData[chartData.length - 1]);
+    // 测算记录最大值
+    // 60月
+    const translateXMax: number = -2950
+    const translateYMax: number = 0
+    // const translateYMax = useMemo<number>(() => {
+    //     if (selectedTab === 0) return 120; // 身高可视范围
+    //     if (selectedTab === 1) return 0; // 体重可视范围
+    //     return 0;
+    // }, [selectedTab]);
+
+    // 选择数据
+    const chartData = useMemo(() => {
+        if (selectedTab === 0) return boy_height_data;  // 身高数据
+        if (selectedTab === 1) return boy_weight_data;  // 体重数据
+        return boy_head_data;  // 头围数据
+    }, [selectedTab]);
+
+    // 限制图表平移范围, 参考：
+    // https://github.com/FormidableLabs/victory-native-xl/issues/530
+    // https://github.com/FormidableLabs/victory-native-xl/blob/main/example/app/pan-zoom.tsx
+    const k = useSharedValue(1);
+    const tx = useSharedValue(0);
+    const ty = useSharedValue(0);
+  
+    // 监听是否有平移或缩放行为的变化
+    useAnimatedReaction(
+      () => {
+        return state.panActive.value || state.zoomActive.value;
+      },
+      (cv, pv) => {
+        if (!cv && pv) {
+          const vals = getTransformComponents(state.matrix.value);
+          k.value = vals.scaleX;
+          tx.value = vals.translateX;
+          ty.value = vals.translateY;
+  
+          console.log(vals.translateX, vals.translateY);
+          
+          k.value = withTiming(1);
+          if (vals.translateX > 0) {
+            tx.value = withTiming(0);
+          }
+          if (vals.translateX <= translateXMax) {
+            tx.value = withTiming(translateXMax)
+          }
+          if (vals.translateY < 0) {
+            ty.value = withTiming(0);
+          }
+          if (vals.translateY >= translateYMax) {
+            ty.value = withTiming(translateYMax)
+          }
+        }
+      },
+    );
+  
+    //监听 k, tx, ty 的值是否变化
+    useAnimatedReaction(
+      () => {
+        return { k: k.value, tx: tx.value, ty: ty.value };
+      },
+      ({ k, tx, ty }) => {
+        const m = setTranslate(state.matrix.value, tx, ty);
+        state.matrix.value = setScale(m, k);
+      },
+    );
 
     return (
         <ThemedView style={styles.container}>
@@ -93,12 +142,11 @@ const BabyScreen = () => {
                 />  
             </ThemedView>
             <ThemedView style={{ marginTop: 10, paddingHorizontal: 20, height: 300, width: '100%' }}>
-                {/* Skia 版 victory-native 当前不支持自定义显示坐标轴和刻度，只能通过 formatXLabel/formatYLabel 格式化刻度文本，坐标轴和刻度线由库自动渲染。 */}
                 <CartesianChart
                     data={chartData}
                     xKey="mouth"
                     yKeys={["p3", "p50", "p97"]}
-                    transformState={transformState.state}
+                    transformState={state}
                     // 配置手势：禁用缩放，只启用X轴平移
                     transformConfig={{
                         pan: {
@@ -110,12 +158,16 @@ const BabyScreen = () => {
                         },
                     }}
                     // 设置X轴范围为0-60，Y轴根据实际数据范围调整
-                    domain={{ x: [0, 60], y: [40, 120] }}
+                    domain={{ 
+                        x: domainXRange, 
+                        y: domainYRange 
+                    }}
                     // 设置视口边界，防止滑动超出数据范围
                     viewport={{
-                        x: [0, 6], // X轴视口范围：显示6个刻度
-                        y: [40, 100], // Y轴视口范围：显示6个刻度
+                        x: viewportXRange, // X轴视口范围：显示6个刻度
+                        y: viewportYRange, // Y轴视口范围：显示6个刻度
                     }}
+                    // 尝试使用更严格的边界限制
                     axisOptions={{
                         font,
                         labelColor: themeColors.text,

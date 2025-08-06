@@ -18,7 +18,7 @@ export default function ToolsScreen() {
   const font = useFont(inter, 12);
 
   return (
-    <ThemedView style={{ height: 300 }}>
+    <ThemedView style={{ marginTop: 60, height: 300 }}>
       <CartesianChart
         data={DATA} // 👈 specify your data
         xKey="day" // 👈 specify data key for x-axis
