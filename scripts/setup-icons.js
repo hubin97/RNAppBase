@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+// 在 ES 模块中获取 __dirname 的等价物
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log('🚀 开始配置 react-native-vector-icons...\n');
 
@@ -169,4 +174,4 @@ console.log('2. 重新构建项目：');
 console.log('   Android: cd android && ./gradlew clean && cd .. && npx react-native run-android');
 console.log('   iOS: cd ios && pod install && cd .. && npx react-native run-ios');
 console.log('3. 开始使用通用图标组件：import Icon from "@/components/ui/Icon"');
-console.log('\n📖 更多信息请查看：docs/图标字体配置文档.md'); 
+console.log('\n📖 更多信息请查看：docs/图标字体配置文档.md');
