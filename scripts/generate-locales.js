@@ -13,14 +13,15 @@
  * 3. 自动生成 src/locales/zh.json, src/locales/en.json 等文件
  */
 
-import fs from 'fs';
-import path from 'path';
-import xlsx from 'xlsx';
-import { fileURLToPath } from 'url';
+const fs = require('fs');
+const path = require('path');
+const xlsx = require('xlsx');
 
-// === ES 模块的路径处理 ===
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// === CommonJS 的路径处理 ===
+// __filename 和 __dirname 直接可用，不需要额外处理
+
+console.log('当前文件路径:', __filename);
+console.log('当前目录路径:', __dirname);
 
 // === 配置区 ===
 // Excel 输入文件路径（相对或绝对路径均可）

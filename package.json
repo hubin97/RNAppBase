@@ -2,7 +2,6 @@
   "name": "rn-app-base",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "android": "pnpm android:reverse && react-native run-android",

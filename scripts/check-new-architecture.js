@@ -1,14 +1,8 @@
 #!/usr/bin/env node
 
-// const fs = require('fs');
-// const path = require('path');
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const fs = require('fs');
+const path = require('path');
 
-// 在 ES 模块中获取 __dirname 的等价物
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 console.log('🔍 检查 React Native 新架构配置状态...\n');
 
 // 检查项目根目录
