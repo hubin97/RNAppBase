@@ -16,6 +16,11 @@
 import fs from 'fs';
 import path from 'path';
 import xlsx from 'xlsx';
+import { fileURLToPath } from 'url';
+
+// === ES 模块的路径处理 ===
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // === 配置区 ===
 // Excel 输入文件路径（相对或绝对路径均可）
