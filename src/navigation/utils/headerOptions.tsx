@@ -101,7 +101,7 @@ export const HeaderRight = ({
     >
       {icon ? (
         <Icon           
-        name={'chevron-forward'} 
+        name={icon} 
         fontType={Font.Ionicons}
         size={24} 
         color={tintColor || themeColor.text } />

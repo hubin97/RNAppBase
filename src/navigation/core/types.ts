@@ -25,6 +25,7 @@ export type HomeStackParamList = {
 export type ToolsStackParamList = {
   Tools: undefined;
   // 可扩展 Tools 相关子页面
+  YogaBall: undefined
 };
 
 export type DiscoverStackParamList = {

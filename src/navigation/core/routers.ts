@@ -6,7 +6,7 @@ import { DiscoverStackNavigator } from '../stacks/DiscoverStackNavigator';
 import { MineStackNavigator } from '../stacks/MineStackNavigator';
 
 import HomeScreen from '@/screens/main/home/index';
-import ToolsScreen from '@/screens/main/ToolsScreen';
+import ToolsScreen from '@/screens/main/tools/index';
 import DiscoverScreen from '@/screens/main/DiscoverScreen';
 import MineScreen from '@/screens/main/MineScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
@@ -15,6 +15,7 @@ import LoginScreen from '@/screens/auth/LoginScreen';
 import RegisterScreen from '@/screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
 import WebViewScreen from '@/components/ui/ThemedWebView';
+import YogaBallScreen from "@/screens/yogaball/index";
 
 export const ROUTES = {
   TabHome: 'TabHome',
@@ -31,8 +32,8 @@ export const ROUTES = {
   Register: 'Register',
   ForgotPassword: 'ForgotPassword',
   // 其他页面按需添加
-  WebView: 'WebView'
-  
+  WebView: 'WebView',
+  YogaBall: 'YogaBall'
 } as const;
 
 export const STACKS = {
@@ -59,5 +60,6 @@ export const SCREENS = {
   [ROUTES.Settings]: SettingsScreen,
   
   // 其他页面按需添加
-  [ROUTES.WebView]: WebViewScreen
+  [ROUTES.WebView]: WebViewScreen,
+  [ROUTES.YogaBall]: YogaBallScreen,
 }; 

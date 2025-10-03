@@ -8,12 +8,16 @@ import { ToolsStackParamList } from '../core/types';
 const Stack = createNativeStackNavigator<ToolsStackParamList>();
 
 export const ToolsStackNavigator = () => (
-  <Stack.Navigator screenOptions={createNavigatorOptions({ headerShown: false })}>
+  <Stack.Navigator screenOptions={createNavigatorOptions({ headerShown: true })}>
     <Stack.Screen
       name={ROUTES.Tools}
       component={SCREENS[ROUTES.Tools]}
       options={{ title: I18n.t('tools') }}
     />
-    {/* 如有 Tools 相关子页面，可在此添加 */}
+    <Stack.Screen
+      name={ROUTES.YogaBall}
+      component={SCREENS[ROUTES.YogaBall]}
+      options={{ headerTitle: I18n.t('yoga_ball') }}
+    />
   </Stack.Navigator>
 ); 
