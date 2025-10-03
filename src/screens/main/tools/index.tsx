@@ -23,8 +23,9 @@ export default function ToolsScreen() {
 
   const _renderItem: ListRenderItem<any>  = ({ item, index }) => {
     return (
-      <ThemedView style={[styles.itemWrapper ]}>
+      <ThemedView style={[styles.itemWrapper, { borderBottomColor: themeColor.separator }]}>
           <TouchableOpacity
+          style={{ flex:1, justifyContent: 'center', alignItems: 'center',  width: '100%'}}
           activeOpacity={0.7}
           onPress={() => {
             if (index == 0) {
@@ -47,7 +48,7 @@ export default function ToolsScreen() {
     <ThemedView style={styles.container}>
         <FlatList
             keyExtractor={(item: any, index: number) => `${index}`}
-            style={[styles.flatlist, { marginTop: insets.top }]}
+            style={[styles.flatlist, {/* marginTop: insets.top*/ }]}
             data={dataList}
             renderItem={_renderItem}
             ItemSeparatorComponent={_renderSeparator}
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent: 'center', 
     alignItems: 'center', 
-    //borderBottomWidth: 0.5, 
+    borderBottomWidth: 0.5, 
     minHeight: 60, 
   },
 }); 
