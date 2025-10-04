@@ -8,7 +8,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
-import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
+// import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
+import CustomWeekCalendar from '@/components/ui/WeekCalendar';
 
 const YogaBallScreen = () => {
   const route = useRoute();
@@ -55,41 +56,9 @@ const YogaBallScreen = () => {
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={{fontSize: 14, marginLeft: 10, marginTop:10, color: themeColors.text }}>{`Practice schedule`}</ThemedText>
-      {/* <Calendar
-        onDayPress={day => {
-          setSelected(day.dateString);
-        }}
-        markedDates={{
-          [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
-        }}
-      /> */}
-      <CalendarProvider 
-          date={currentDate}
-          onDateChanged={(date) => {
-            // 当日期变化时（例如滑动），更新当前日期状态
-            setCurrentDate(date);
-          }}
-        >
-          <WeekCalendar
-            // 允许通过滑动切换周
-            pagingEnabled={true}
-            // 处理日期点击事件
-            onDayPress={(day) => {
-              setCurrentDate(day.dateString);
-            }}
-            // 设置一周的第一天，例如 1 表示周一，7 表示周日
-            firstDay={7}
-            // 可以添加自定义主题
-            theme={{
-              // 例如，调整周视图的高度
-              'stylesheet.weekCalendar.main': {
-                container: {
-                  height: 70 // 根据你的需要调整高度
-                }
-              }
-            }}
-          />
-      </CalendarProvider>
+      <CustomWeekCalendar showHeader={false} onWeekChange={({date, direction}) => {
+        console.log('date =>', date, direction);
+      }}/>
     </ThemedView>
   );
 };
