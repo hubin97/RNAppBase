@@ -4,7 +4,7 @@
  * 1.夜间模式,多一块背景颜色没找到方法修改
  */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
 import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import Icon, { Font } from '@/components/ui/Icon';
 import { useThemeColors } from '@/hooks/useThemeColor';
@@ -15,16 +15,21 @@ const { width: screenWidth } = Dimensions.get('window');
 interface CustomWeekCalendarProps {
   showHeader?: boolean;
   headerStyle?: any;
+  backgroundColor?: string;
+  selectedColor?: string;
   onWeekChange?: (data: { date: string; direction: 'prev' | 'next' | 'scroll' }) => void;
 }
 
 const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({ 
   showHeader = true,
-  headerStyle = {},
+  headerStyle = {flex: 1},
+  backgroundColor = '#fff',
+  selectedColor = '#007AFF',
   onWeekChange,
 }) => {
   const themeColors = useThemeColors();
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+  const headerHeight = 45 //showHeader ? 50: 50
 
   // 周切换函数
   const goToNextWeek = () => {
@@ -63,7 +68,7 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
 
   return (
     <View style={{ 
-      backgroundColor: themeColors.background,
+      backgroundColor: backgroundColor,
       width: screenWidth,
     }}>
       {/* 动态显示/隐藏的周切换头部 */}
@@ -78,7 +83,7 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
             borderBottomWidth: 0.5,
             borderBottomColor: themeColors.separator || '#f0f0f0',
             width: '100%',
-            backgroundColor: themeColors.background,
+            backgroundColor: backgroundColor,
           },
           headerStyle
         ]}>
@@ -140,16 +145,16 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
       >
         <View style={{
           width: screenWidth,
-          height: showHeader ? 80 : 100,
-          backgroundColor: themeColors.background,
+          height: headerHeight,
+          backgroundColor: backgroundColor,
         }}>
           <WeekCalendar
             style={{
               width: screenWidth,
-              height: showHeader ? 80 : 100,
-              backgroundColor: themeColors.background,
+              height: headerHeight,
+              backgroundColor: backgroundColor,
             }}
-            calendarHeight={showHeader ? 80 : 100}
+            calendarHeight={headerHeight}
             allowShadow={false}
             pagingEnabled={true}
             horizontal={true}
@@ -162,7 +167,7 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
             markedDates={{
               [currentDate]: { 
                 selected: true, 
-                selectedColor: '#007AFF',
+                selectedColor: selectedColor,
                 selectedTextColor: 'white'
               }
             }}
