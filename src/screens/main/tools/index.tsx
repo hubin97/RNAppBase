@@ -17,6 +17,7 @@ export default function ToolsScreen() {
   const themeColor = useThemeColors();
 
   const dataList = [
+    `视频播放`,
     `瑜伽球`,
     `其他类`,
   ]
@@ -29,6 +30,8 @@ export default function ToolsScreen() {
           activeOpacity={0.7}
           onPress={() => {
             if (index == 0) {
+              navigation.navigate(ROUTES.VideoPlay);
+            } else if (index == 1) {
               navigation.navigate(ROUTES.YogaBall);
             } else {
               Alert.alert(`开发中`)

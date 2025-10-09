@@ -24,39 +24,7 @@ const YogaBallScreen = () => {
     `计划2`,
   ]
 
-  useLayoutEffect(() => {
-        navigation.setOptions({
-        //title: title,
-        headerShown: true,
-        headerStyle: {
-            backgroundColor: themeColor.background,
-        },
-        headerBackVisible: false,
-        headerBackTitleVisible: false,
-        headerTintColor: themeColor.text,
-        headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
-            textColor: themeColor.text,
-        },
-        headerLeft: () => (
-            <Icon name={'chevron-back'} 
-              fontType={Font.Ionicons}
-              size={24} 
-              color={themeColor.text} onPress={() =>
-              navigation.goBack()
-            }/>
-        ),
-        headerRight: () => (
-            <HeaderRight
-                icon='settings'
-                onPress={() => {
-                
-                }}
-            />
-        ),
-    });
-  }, [navigation, themeColor]);
+  // 导航头由导航器层统一配置，页面无需在这里重复设置
 
   const _renderPlanItem: ListRenderItem<any>  = ({ item, index }) => {
       return (

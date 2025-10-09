@@ -16,6 +16,7 @@ import RegisterScreen from '@/screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '@/screens/auth/ForgotPasswordScreen';
 import WebViewScreen from '@/components/ui/ThemedWebView';
 import YogaBallScreen from "@/screens/yogaball/index";
+import VideoPlayScreen from '@/screens/video/index';
 
 export const ROUTES = {
   TabHome: 'TabHome',
@@ -33,6 +34,7 @@ export const ROUTES = {
   ForgotPassword: 'ForgotPassword',
   // 其他页面按需添加
   WebView: 'WebView',
+  VideoPlay: 'VideoPlay',
   YogaBall: 'YogaBall'
 } as const;
 
@@ -61,5 +63,6 @@ export const SCREENS = {
   
   // 其他页面按需添加
   [ROUTES.WebView]: WebViewScreen,
+  [ROUTES.VideoPlay]: VideoPlayScreen,
   [ROUTES.YogaBall]: YogaBallScreen,
 }; 
