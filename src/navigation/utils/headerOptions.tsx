@@ -35,7 +35,7 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
       <TouchableOpacity
         onPress={handlePress}
         style={{
-          marginLeft: -10,
+          margin: -3,
           width: 44,
           height: 44,
           justifyContent: 'center',
@@ -58,7 +58,7 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
       <TouchableOpacity 
       onPress={handlePress}
       style={{ 
-        marginLeft: -5,
+        margin: -3,
         minWidth: 44,
         height: 44,
         justifyContent: 'center',
@@ -92,7 +92,7 @@ export const HeaderRight = ({
     <TouchableOpacity 
       onPress={onPress}
       style={{
-        marginRight: icon ? -10: -5,
+        margin: -3,
         minWidth: 44,
         height: 44,
         justifyContent: 'center',
@@ -160,12 +160,13 @@ export const createNavigatorOptions = (
     headerShown,
     headerBackVisible: false,
     headerLeft: (props) => (
+      showLeft ?
       <HeaderLeft
         {...props}
         leftElement={leftElement}
         showLeft={showLeft}
         tintColor={tintColor}
-      />
+      />: null
     ),
     headerTitle,
     headerTintColor: tintColor,
