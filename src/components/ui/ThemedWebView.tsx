@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import Icon, { Font } from "./Icon";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 import { ThemedView } from "./ThemedView";
@@ -36,17 +36,28 @@ export default function WebViewScreen() {
         headerBackTitleVisible: false,
         headerTintColor: themeColors.text,
         headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
+            fontWeight: '500',
+            fontSize: 17,
             textColor: themeColors.text,
         },
-        headerLeft: () => (
-            <Icon name={'chevron-back'} 
+        headerLeft: () => (  
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{
+              margin: -3,
+              width: 44,
+              height: 44,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Icon 
+              name={'chevron-back'} 
               fontType={Font.Ionicons}
               size={24} 
-              color={themeColors.text} onPress={() =>
-              navigation.goBack()
-            }/>
+              color={themeColors.text } 
+            />
+          </TouchableOpacity>
         ),
     });
   }, [navigation, title, themeColors]);
