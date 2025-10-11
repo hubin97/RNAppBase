@@ -108,7 +108,7 @@ const YogaBallScreen = () => {
   // plan
   // plan 列表（数据量小，直接映射渲染保证顺序流式布局）
   const _planList = (
-    <View style={{ marginTop: 24, paddingTop: 14, backgroundColor: backgroundColor }}>
+    <View style={{  paddingTop: 14, backgroundColor: backgroundColor }}>
       {planList.map((item, idx) => (
         <View key={idx}>
           {renderPlanNode(item, idx)}
@@ -119,7 +119,7 @@ const YogaBallScreen = () => {
 
   // recommand
   const _recommandList = (
-    <View style={{ marginTop: 12, backgroundColor: backgroundColor }}>
+    <View style={{  backgroundColor: backgroundColor }}>
       <ThemedText style={{fontSize: 14, marginHorizontal: 20, marginVertical:10, color: themeColor.text }}>{`Recommandation`}</ThemedText>
       {planList.map((item, idx) => (
         <View key={idx}>

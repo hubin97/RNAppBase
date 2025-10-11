@@ -33,7 +33,8 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
   // 设置背景色
   var backgroundColor = theme == 'light' ? backgroundColor: themeColors.background;
-  const headerHeight = 45 //showHeader ? 50: 50
+  
+  // 默认使用 WeekCalendar 组件的原生高度，不主动设置固定值
 
   // 周切换函数
   const goToNextWeek = () => {
@@ -161,20 +162,17 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
       >
         <View style={{
           width: screenWidth,
-          height: headerHeight,
           backgroundColor: backgroundColor,
         }}>
           <WeekCalendar
             style={{
               width: screenWidth,
-              height: headerHeight,
               backgroundColor: backgroundColor,
             }}
             theme={{
               // FIXME: 必须设置透明，否则会有块白色背景间隙
               calendarBackground: "transparent",
             }}
-            calendarHeight={headerHeight}
             allowShadow={false}
             pagingEnabled={true}
             horizontal={true}
