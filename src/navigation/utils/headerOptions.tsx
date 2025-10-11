@@ -159,6 +159,7 @@ export const createNavigatorOptions = (
   return {
     headerShown,
     headerBackVisible: false,
+    headerShadowVisible: false, // 全局隐藏导航栏分割线
     headerLeft: (props) => (
       showLeft ?
       <HeaderLeft

@@ -4,10 +4,11 @@
  * 1.夜间模式,多一块背景颜色没找到方法修改
  */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet, useColorScheme } from 'react-native';
 import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import Icon, { Font } from '@/components/ui/Icon';
 import { useThemeColors } from '@/hooks/useThemeColor';
+import * as RNLocalize from 'react-native-localize';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -27,8 +28,11 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
   selectedColor = '#007AFF',
   onWeekChange,
 }) => {
+  const theme = useColorScheme() ?? 'light';
   const themeColors = useThemeColors();
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+  // 设置背景色
+  var backgroundColor = theme == 'light' ? backgroundColor: themeColors.background;
   const headerHeight = 45 //showHeader ? 50: 50
 
   // 周切换函数
@@ -58,9 +62,21 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     
+    // 使用用户的完整地区设置（包含时区、日期格式等）
+    const locale = RNLocalize.getLocales()[0];
+    const timeZone = RNLocalize.getTimeZone();
+    
     return {
-      start: startOfWeek.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }),
-      end: endOfWeek.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
+      start: startOfWeek.toLocaleDateString(locale.languageTag, { 
+        month: 'short', 
+        day: 'numeric',
+        timeZone 
+      }),
+      end: endOfWeek.toLocaleDateString(locale.languageTag, { 
+        month: 'short', 
+        day: 'numeric',
+        timeZone
+      })
     };
   };
 
@@ -153,6 +169,10 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
               width: screenWidth,
               height: headerHeight,
               backgroundColor: backgroundColor,
+            }}
+            theme={{
+              // FIXME: 必须设置透明，否则会有块白色背景间隙
+              calendarBackground: "transparent",
             }}
             calendarHeight={headerHeight}
             allowShadow={false}

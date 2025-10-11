@@ -1,3 +1,8 @@
+/**
+ * 视频播放
+ * https://docs.thewidlarzgroup.com/react-native-video-player/docs/api/methods
+ */
+
 import { ThemedText } from "@/components/ui/ThemedText";
 import { ThemedView } from "@/components/ui/ThemedView";
 import { useThemeColors } from "@/hooks/useThemeColor";
@@ -16,10 +21,14 @@ const VideoPlayScreen = () => {
         <ThemedView style={{ flex: 1, backgroundColor: themeColor.background }}>
             <VideoPlayer
                 ref={playerRef}
-                autoplay={true}
-                endWithThumbnail
+                //autoplay={true}
+                endWithThumbnail={true}
+                // endThumbnail如果不设置, 展示thumbnail设置的值 
+                // endThumbnail={{
+                //     uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+                // }}
                 thumbnail={{
-                uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+                    uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
                 }}
                 source={{
                 uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
