@@ -10,38 +10,37 @@ import { Alert, ImageBackground, ListRenderItem, StyleSheet, TouchableOpacity, u
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 // import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import CustomWeekCalendar from '@/components/ui/WeekCalendar';
+import PlanModal from './PlanModal';
 
 const YogaBallScreen = () => {
   const route = useRoute();
   const theme = useColorScheme() ?? 'light';
   const themeColor = useThemeColors();
   const navigation = useNavigation();
+
+  const backgroundColor= theme == 'light' ? '#eee' : themeColor.background
+
   const [selected, setSelected] = useState('');
   // 初始化当前日期
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
-  const backgroundColor= theme == 'light' ? '#eee' : themeColor.background
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   const planList = [
     `计划1`,
     `计划2`,
   ]
 
-  // 导航头由导航器层统一配置，页面无需在这里重复设置
-
-  // const _renderPlanItem: ListRenderItem<any>  = ({ item, index }) => {
-  //     return (
-  //       <ThemedView style={[styles.itemWrapper, { backgroundColor: theme == 'light' ? '#fff': '#333' }]}>
-  //         <TouchableOpacity
-  //           style={{ flex:1, marginLeft: 16, justifyContent: 'center',  width: '100%'}}
-  //           activeOpacity={0.7}
-  //           onPress={() => {
-  //               Alert.alert(`开发中`)
-  //           }}>
-  //             <ThemedText type='title' style={{ fontSize: 12, fontWeight: '400' }}>{item}</ThemedText>
-  //           </TouchableOpacity>
-  //       </ThemedView>
-  //     );
-  // };
+  // 计划弹窗
+  const _planSheetModel = (
+      <PlanModal 
+        visible={showPlanModal} 
+        onClose={() => setShowPlanModal(false)} 
+        onOk={() => {
+          setShowPlanModal(false);
+          Alert.alert(`计划已保存`);
+        }}
+      />
+  );
 
   // 小型渲染辅助，供 map 使用（避免传递给 ListRenderItem 导致类型不匹配）
   const renderPlanNode = (item: any, index: number) => (
@@ -49,7 +48,7 @@ const YogaBallScreen = () => {
       <TouchableOpacity
         style={{ flex:1, marginLeft: 16, justifyContent: 'center',  width: '100%'}}
         activeOpacity={0.7}
-        onPress={() => { Alert.alert(`开发中`) }}>
+        onPress={() => setShowPlanModal(true)}>
         <ThemedText type='title' style={{ fontSize: 12, fontWeight: '400' }}>{item}</ThemedText>
       </TouchableOpacity>
     </ThemedView>
@@ -136,6 +135,7 @@ const YogaBallScreen = () => {
         { _weekView }
         { _planList }
         { _recommandList}
+        { _planSheetModel }
       </ScrollView>
     </ThemedView>
   );

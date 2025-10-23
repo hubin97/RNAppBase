@@ -11,5 +11,9 @@
   "settings": "设置",
   "profile": "个人资料",
   "yoga_ball": "瑜伽球",
-  "video_play": "视频播放"
+  "video_play": "视频播放",
+  "others": "其它",
+  "string_pending": "待定",
+  "string_cancel": "取消",
+  "string_ok": "确认"
 }

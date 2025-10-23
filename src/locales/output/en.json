@@ -11,5 +11,9 @@
   "settings": "Settings",
   "profile": "Profile",
   "yoga_ball": "Yoga Ball",
-  "video_play": "Video Play"
+  "video_play": "Video Play",
+  "others": "Others",
+  "string_pending": "Pending",
+  "string_cancel": "Cancel",
+  "string_ok": "OK"
 }

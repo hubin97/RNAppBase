@@ -17,9 +17,9 @@ export default function ToolsScreen() {
   const themeColor = useThemeColors();
 
   const dataList = [
-    `视频播放`,
-    `瑜伽球`,
-    `其他类`,
+    I18n.t('video_play'),
+    I18n.t('yoga_ball'),
+    I18n.t('others'),
   ]
 
   const _renderItem: ListRenderItem<any>  = ({ item, index }) => {
@@ -34,7 +34,7 @@ export default function ToolsScreen() {
             } else if (index == 1) {
               navigation.navigate(ROUTES.YogaBall);
             } else {
-              Alert.alert(`开发中`)
+              Alert.alert(I18n.t('string_pending'));
             }
           }}>
             <ThemedText type='title' style={{ fontSize: 15 }}>{item}</ThemedText>
