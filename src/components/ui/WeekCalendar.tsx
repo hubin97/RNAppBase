@@ -1,9 +1,10 @@
 /**
  * https://github.com/wix/react-native-calendars
- * 遗留问题
- * 1.夜间模式,多一块背景颜色没找到方法修改
+ // 主题切换问题
+ 参考 https://github.com/wix/react-native-calendars/issues/2539
+ react-native-calendars 的 theme 属性内部被 StyleSheet.create() 缓存，导致 React 的 re-render 并不会重新应用新主题。所以即使 theme 对象变了，UI 也不会更新。
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, Dimensions, StyleSheet, useColorScheme } from 'react-native';
 import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import Icon, { Font } from '@/components/ui/Icon';
@@ -82,6 +83,13 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
   };
 
   const weekRange = getWeekRange();
+
+  const calendarTheme = useMemo(() => ({
+    // FIXME: 必须设置透明，否则会有块白色背景间隙
+    calendarBackground: "transparent",
+    dayTextColor: themeColors.text,
+    monthTextColor: themeColors.text,
+  }), [themeColors]);
 
   return (
     <View style={{ 
@@ -169,10 +177,8 @@ const CustomWeekCalendar: React.FC<CustomWeekCalendarProps> = ({
               width: screenWidth,
               backgroundColor: backgroundColor,
             }}
-            theme={{
-              // FIXME: 必须设置透明，否则会有块白色背景间隙
-              calendarBackground: "transparent",
-            }}
+            key={themeColors.background}
+            theme={calendarTheme}
             allowShadow={false}
             pagingEnabled={true}
             horizontal={true}
