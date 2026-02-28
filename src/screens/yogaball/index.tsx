@@ -2,7 +2,7 @@ import Icon, { Font } from '@/components/ui/Icon';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { ThemedView } from '@/components/ui/ThemedView';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import { HeaderRight } from '@/navigation/utils/headerOptions';
+import { HeaderRight } from '@/navigation/adapters/headerOptions';
 import I18n from '@/utils/i18n';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';

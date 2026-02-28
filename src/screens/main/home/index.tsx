@@ -14,8 +14,8 @@ import { Skeleton_Home } from '../../../utils/skeletons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '@/navigation/core/types';
-import { ROUTES } from "@/navigation/core/routers";
+import type { RootStackParamList } from '@/navigation/config/paramLists';
+import { ROUTES } from "@/navigation/config/routes";
 import { styles } from "./type";
 
 const HomeScreen = () => {

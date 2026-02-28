@@ -5,10 +5,11 @@ import I18n from '@/utils/i18n';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { ToolsStackParamList } from '@/navigation/core/types';
+import type { ToolsStackParamList } from '@/navigation/config/paramLists';
 import { Alert, FlatList, ListRenderItem, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ROUTES, SCREENS } from '@/navigation/core/routers';
+import { ROUTES } from '@/navigation/config/routes';
+import { SCREENS } from '@/navigation/config/screens';
 
 export default function ToolsScreen() {
 

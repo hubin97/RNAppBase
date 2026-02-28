@@ -3,7 +3,7 @@ import I18n from '@/utils/i18n';
 import ParallaxScrollView from '@/components/ui/ParallaxScrollView';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { ThemedView } from '@/components/ui/ThemedView';
-import { RootStackParamList } from '@/navigation/core/types';
+import { RootStackParamList } from '@/navigation/config/paramLists';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, ImageBackground } from 'react-native';

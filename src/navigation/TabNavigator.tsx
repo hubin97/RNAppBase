@@ -1,12 +1,30 @@
+/**
+ * Tab 导航器
+ * 
+ * 根据配置自动生成 Tab 导航器，无需手动维护 Stack 组件映射
+ */
 import React from 'react';
-import I18n from '@/utils/i18n';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TabParamList } from './core/types';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import { ROUTES, STACKS } from './core/routers';
+import { TabParamList } from './config/paramLists';
+import {
+  TAB_CONFIGS,
+  HomeStackNavigator,
+  ToolsStackNavigator,
+  DiscoverStackNavigator,
+  MineStackNavigator,
+} from './config/navigators';
 
 const Tab = createBottomTabNavigator<TabParamList>();
+
+// Stack 组件映射（根据 TAB_CONFIGS 自动生成）
+const STACK_COMPONENTS = {
+  Home: HomeStackNavigator,
+  Tools: ToolsStackNavigator,
+  Discover: DiscoverStackNavigator,
+  Mine: MineStackNavigator,
+} as const;
 
 // 判断是否在子页面, 隐藏tabBar
 const shouldHideTab = (navigation: any) => {
@@ -18,7 +36,7 @@ export const TabNavigator = () => {
   const themeColor = useThemeColors();
   return (
     <Tab.Navigator
-      screenOptions={({ route, navigation }) => ({
+      screenOptions={({ navigation }) => ({
         headerShown: false,
         tabBarActiveTintColor: themeColor.tabIconSelected,
         tabBarInactiveTintColor: themeColor.tabIconDefault,
@@ -28,46 +46,19 @@ export const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen
-        name={ROUTES.TabHome}
-        component={STACKS.Home}
-        options={{
-          tabBarLabel: I18n.t('home'),
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.TabTools}
-        component={STACKS.Tools}
-        options={{
-          tabBarLabel: I18n.t('tools'),
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="construct-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.TabDiscover}
-        component={STACKS.Discover}
-        options={{
-          tabBarLabel: I18n.t('discover'),
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="people-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={ROUTES.TabMine}
-        component={STACKS.Mine}
-        options={{
-          tabBarLabel: I18n.t('mine'),
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="person-outline" color={color} size={size} />
-          ),
-        }}
-      />
+      {TAB_CONFIGS.map((tab) => (
+        <Tab.Screen
+          key={tab.name}
+          name={tab.name as keyof TabParamList}
+          component={STACK_COMPONENTS[tab.stackKey as keyof typeof STACK_COMPONENTS]}
+          options={{
+            tabBarLabel: tab.label,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name={tab.icon} color={color} size={size} />
+            ),
+          }}
+        />
+      ))}
     </Tab.Navigator>
   );
-}; 
+};

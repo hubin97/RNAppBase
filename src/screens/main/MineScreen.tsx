@@ -10,11 +10,11 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MineStackParamList } from '@/navigation/core/types';
+import { MineStackParamList } from '@/navigation/config/paramLists';
 import I18n from '@/utils/i18n';
 import { ThemedView } from '@/components/ui/ThemedView';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import { ROUTES } from '@/navigation/core/routers';
+import { ROUTES } from '@/navigation/config/routes';
 
 const HEADER_HEIGHT = 200;
 

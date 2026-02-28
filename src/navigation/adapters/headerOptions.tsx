@@ -1,10 +1,18 @@
-import { Platform, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
-import Icon, { Font } from '@/components/ui/Icon';
+/**
+ * Header 选项适配器（项目适配层 - 依赖项目特定逻辑）
+ * 
+ * 此文件处理项目特定的 Header 配置，如主题、国际化等
+ * 其他项目需要根据自身需求实现类似的适配器
+ * 
+ * 注意：此文件依赖项目的主题系统、国际化等，需要根据项目调整
+ */
+import React from 'react';
+import { Platform, TouchableOpacity, Text, View } from 'react-native';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { useThemeColors } from '@/hooks/useThemeColor';
-
-// const DEFAULT_TINT_COLOR = '#333';
+import Icon, { Font } from '@/components/ui/Icon';
+import type { NavigatorOptionsParams } from '../core/types';
 
 type HeaderLeftProps = {
   tintColor?: string;
@@ -15,13 +23,12 @@ type HeaderLeftProps = {
 
 const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: HeaderLeftProps) => {
   const navigation = useNavigation();
-  const themeColor = useThemeColors()
+  const themeColor = useThemeColors();
 
   if (!showLeft) {
     return null;
   }
 
-  // 设置默认返回
   const handlePress = () => {
     if (onPress) {
       onPress();
@@ -41,13 +48,12 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        //hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
         <Icon 
           name={'chevron-back'} 
           fontType={Font.Ionicons}
           size={24} 
-          color={tintColor || themeColor.text } 
+          color={tintColor || themeColor.text} 
         />
       </TouchableOpacity>
     );
@@ -56,15 +62,18 @@ const HeaderLeft = ({ tintColor, onPress, leftElement, showLeft = true }: Header
   if (typeof leftElement === 'string') {
     return (
       <TouchableOpacity 
-      onPress={handlePress}
-      style={{ 
-        margin: -3,
-        minWidth: 44,
-        height: 44,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }} >
-        <Text style={{ color: tintColor || themeColor.text, fontSize: 17, fontWeight: '500' }}>{leftElement}</Text>
+        onPress={handlePress}
+        style={{ 
+          margin: -3,
+          minWidth: 44,
+          height: 44,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: tintColor || themeColor.text, fontSize: 17, fontWeight: '500' }}>
+          {leftElement}
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -101,10 +110,11 @@ export const HeaderRight = ({
     >
       {icon ? (
         <Icon           
-        name={icon} 
-        fontType={Font.Ionicons}
-        size={24} 
-        color={tintColor || themeColor.text } />
+          name={icon} 
+          fontType={Font.Ionicons}
+          size={24} 
+          color={tintColor || themeColor.text} 
+        />
       ) : (
         <Text style={{ fontSize: 16, fontWeight: '500', color: tintColor || themeColor.text }}>
           {text}
@@ -115,36 +125,16 @@ export const HeaderRight = ({
 };
 
 /**
- * 创建导航配置
- * @example
- * // 1. 最简单的使用（显示导航栏和默认返回按钮）
- * options={createNavigatorOptions()}
+ * 创建导航配置（项目特定适配）
  * 
- * // 2. 隐藏导航栏
- * options={createNavigatorOptions({ headerShown: false })}
- * 
- * // 3. 显示导航栏但隐藏返回按钮
- * options={createNavigatorOptions({ showLeft: false })}
- * 
- * // 4. 使用文字作为返回按钮
- * options={createNavigatorOptions({ leftElement: '返回' })}
- * 
- * // 5. 使用自定义组件
- * options={createNavigatorOptions({ 
- *   leftElement: <CustomButton /> 
- * })}
+ * 此函数内部会自动获取 themeColor，无需手动传入
  */
 export const createNavigatorOptions = (
-  options: {
-    headerShown?: boolean;    // 控制导航栏是否显示
-    showLeft?: boolean;       // 控制左侧按钮是否显示
-    leftElement?: React.ReactNode;  // 自定义左侧按钮内容
-    headerTitle?: string;     // 导航栏标题
-    headerStyle?: object;     // 导航栏样式
-    headerTitleStyle?: object; // 标题样式
-    tintColor?: string;       // 导航栏文字和图标颜色
-  } = {}
+  options: NavigatorOptionsParams = {}
 ): NativeStackNavigationOptions => {
+  // 在函数内部调用 hook，确保在组件渲染时执行
+  const themeColor = useThemeColors();
+  
   const { 
     headerShown = true,
     showLeft = false,
@@ -155,7 +145,6 @@ export const createNavigatorOptions = (
     tintColor
   } = options;
 
-  const themeColor = useThemeColors()
   return {
     headerShown,
     headerBackVisible: false,

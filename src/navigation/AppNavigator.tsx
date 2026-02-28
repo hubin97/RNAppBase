@@ -1,16 +1,28 @@
-import React, { useEffect } from 'react';
+/**
+ * 根导航器
+ * 
+ * 根据认证状态动态显示不同的导航栈
+ */
+import React from 'react';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './core/types';
+import { RootStackParamList } from './config/paramLists';
 import { TabNavigator } from './TabNavigator';
-import { AuthNavigator } from './AuthNavigator';
 import { useColorScheme } from 'react-native';
 import { useThemeColors } from '@/hooks/useThemeColor';
-import WebViewScreen from '@/components/ui/ThemedWebView';
+import { ROOT_STACK_CONFIGS } from './config/navigators';
+import { SCREENS } from './config/screens';
+import { AuthNavigator } from './config/navigators';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// 组件映射（根据 ROOT_STACK_CONFIGS 自动生成）
+const COMPONENT_MAP = {
+  TabNavigator,
+  AuthNavigator,
+} as const;
 
 export const AppNavigator = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -23,23 +35,32 @@ export const AppNavigator = () => {
     ? { ...DarkTheme, colors: { ...DarkTheme.colors, background: themeColor.background } }
     : { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: themeColor.background } };
 
-  // 可以选择在这里添加一个 useEffect 来初始化认证状态，但通常这会在 authSlice 中处理
-  // 或者在 App.tsx 的 Provider 之外进行初始化检查
+  const screens = isAuthenticated 
+    ? ROOT_STACK_CONFIGS.authenticated 
+    : ROOT_STACK_CONFIGS.unauthenticated;
+
   return (
     <NavigationContainer theme={Theme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated ? (
-          <>
-            <Stack.Screen name="Main" component={TabNavigator} />
-            <Stack.Screen name="WebView" component={WebViewScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Auth" component={AuthNavigator} />
-            <Stack.Screen name="WebView" component={WebViewScreen} />
-          </>
-        )}
+        {screens.map((screen) => {
+          const component = screen.componentKey 
+            ? COMPONENT_MAP[screen.componentKey as keyof typeof COMPONENT_MAP]
+            : screen.screenKey 
+            ? SCREENS[screen.screenKey as keyof typeof SCREENS]
+            : null;
+          
+          if (!component) return null;
+          
+          return (
+            <Stack.Screen
+              key={screen.name}
+              name={screen.name as keyof RootStackParamList}
+              component={component}
+              options={screen.options}
+            />
+          );
+        })}
       </Stack.Navigator>
     </NavigationContainer>
   );
-}; 
+};
